@@ -1,0 +1,99 @@
+body {
+    background-color: #696E6E;
+}
+
+#wrapper{
+  width: 1150px;
+  margin: auto;
+}
+    #header {
+        height: 250px;
+        width: 100%;
+        background-color: #848787;
+    }
+        #logo /*the logo in the header(the image is a background-image)*/
+        {
+          margin: auto;
+          height: 250px;
+          width: 250px;
+          background-image: url("icon2.png");
+
+          -webkit-transition: all 1000ms ease;
+          -moz-transition: all 1000ms ease;
+          -ms-transition: all 1000ms ease;
+          -o-transition: all 1000ms ease;
+          transition: all 1000ms ease;
+        }
+            #logo:hover {
+              background-image: url("icon1.png");
+            }
+
+    #IO {  /*The content box and the sidemenu */
+      width: 100%;
+      margin: auto;
+      margin-top: 40px;
+    }
+        #content {
+          width: 83%;
+          margin-bottom: 40px;
+          background-color: #FCFFFF;
+          float: left;
+        }
+            .contentitem{
+              margin: auto;
+              font-family: Arial;
+              width: 80%;
+              margin-bottom: 50px;
+            }
+                .contentitem h1{ /*the title*/
+                  font-size: 30px;
+                }
+                .contentitem p{ /*the actual text*/
+                  font-size: 14px;
+                  text-align: justify;
+                }
+        #sidemenu {
+          float: right;
+          height: 400px;
+          width: 15%;
+        }
+            .sidemenuitem{
+              float:right;
+              height: 30px;
+              width: 80%;
+              background-color: #00F7F7;
+              margin-bottom: 7px;
+
+              text-align: center;
+              vertical-align: middle;
+              font-family: Arial;
+              text-decoration: none;
+              color: white;
+              font-size: 14px;
+
+              -webkit-transition: all 500ms ease;
+              -moz-transition: all 500ms ease;
+              -ms-transition: all 500ms ease;
+              -o-transition: all 500ms ease;
+              transition: all 500ms ease;
+            }
+                .sidemenuitem:hover{
+                  width: 90%;
+                }
+
+    #footer {
+      clear: both;
+      margin: none;
+      height: 30px;
+      width: 100%;
+      background-color: #848787;
+    }
+        #footer p{
+          font-family: Arial;
+          font-size: 16px;
+          text-align: right;
+          vertical-align: middle;
+          padding-right: 10px;
+          padding-top: 5px;
+          color: white;
+        }
