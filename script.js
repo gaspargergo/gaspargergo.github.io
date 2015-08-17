@@ -8,7 +8,7 @@ var list;
 var sorting = "/new"
 var colorArray = ["#F44336","#9C27B0","#2196F3","#009688","#607D8B","#4CAF50"];
 var sortingArray = ["/hot","/new"];
-var limitArray = [25,50,75,10];
+var limitArray = [25,50,10];
 var nsfwFilter = true;
 var shortnessFilter = false;
 var postLimit = 10;
