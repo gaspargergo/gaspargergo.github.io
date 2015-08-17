@@ -27,7 +27,7 @@ var loadData = function()
   }
   else
   {
-    urlToLoad = "https://www.reddit.com/r/jokes" + sorting + ".json" + "?limit=" + (postLimit+ 10);
+    urlToLoad = "https://www.reddit.com/r/jokes" + sorting + ".json" + "?limit=" + (postLimit+ 20);
   }
   console.log(postLimit);
   console.log(urlToLoad);
@@ -48,7 +48,7 @@ var addPosts = function(listing)  //Adds post to a string that will be added to 
 
   if(shortnessFilter == true)
   {
-    textLimit = 700;
+    textLimit = 600;
   }
 
   for(var i = 0; jokes < postLimit; i++)
