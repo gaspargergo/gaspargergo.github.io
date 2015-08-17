@@ -27,7 +27,7 @@ var loadData = function()
   }
   else
   {
-    urlToLoad = "https://www.reddit.com/r/jokes" + sorting + ".json" + "?limit=" + (postLimit+ 20);
+    urlToLoad = "https://www.reddit.com/r/jokes" + sorting + ".json" + "?limit=" + (postLimit+ 25);
   }
   console.log(postLimit);
   console.log(urlToLoad);
