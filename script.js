@@ -18,59 +18,63 @@ var postLimit = 10;
 Functions loading the jokes
 ---------------------------
 */
-var loadData = function()
-{
+var loadData = function() {
   var urlToLoad = "";
-  if(postLimit <= 10)
-  {
+  if(postLimit <= 10) {
     urlToLoad = "https://www.reddit.com/r/jokes" + sorting + ".json";
   }
-  else
-  {
+  else {
     urlToLoad = "https://www.reddit.com/r/jokes" + sorting + ".json" + "?limit=" + (postLimit+ 25);
   }
 
-  $.getJSON(urlToLoad, function(json){
+  var request = new XMLHttpRequest();
+  request.open('GET',urlToLoad, true);
+
+  request.onload = function() {
+  if (this.status >= 200 && this.status < 400) {
+    var json = JSON.parse(this.response);
     list = json.data.children;
     listPosts(list);
-  });
+  } else {
+    // We reached our target server, but it returned an error
+  }
+};
+
+request.onerror = function() {
+  prompt("Connection error");
+};
+
+request.send();
 }
 
 loadData(); //The first call - when loading the website.
 
-var addPosts = function(listing)  //Adds post to a string that will be added to the body
-{
+var addPosts = function(listing){ //Adds post to a string that will be added to the body
   var jokes = 0;
   var result = "";
   var textLimit = 111111111;
 
-  if(shortnessFilter == true)
-  {
+  if(shortnessFilter === true) {
     textLimit = 600;
   }
 
-  for(var i = 0; jokes < postLimit; i++)
-  {
+  for(var i = 0; jokes < postLimit; i++) {
     var obj = listing[i].data;
     
     var title = obj.title;
     var exturl = obj.url;
     var text = obj.selftext;
 
-    if(text.length < textLimit)
-    {
-      if(nsfwFilter == true)
-      {
-        if(obj.over_18 == false)
-        {
+    if(text.length < textLimit) {
+      if(nsfwFilter === true) {
+        if(obj.over_18 === false) {
           var temp = result;
              
           result = temp + "<div>" + "<h1>" + title + "</h1>" + "<p>" + text + "</p>" + "</div>";
           jokes += 1;
         }
       }
-      else
-      {
+      else {
         var temp = result;
              
         result = temp + "<div>" + "<h1>" + title + "</h1>" + "<p>" + text + "</p>" + "</div>";
@@ -82,8 +86,7 @@ var addPosts = function(listing)  //Adds post to a string that will be added to 
   return result;
 }
 
-var listPosts = function(listing) //Adds the string to the body
-{
+var listPosts = function(listing) { //Adds the string to the body
   var result = addPosts(listing);
   document.getElementById("content").innerHTML = result;
 }
@@ -95,32 +98,26 @@ Functions of the options/menu items
 */
 
 var k = 0; //the var to cycle through different sorts
-var changeSorting = function()
-{
+var changeSorting = function() {
   sorting = sortingArray[k];
   document.getElementById("sortingChangeA").innerHTML = "r/jokes" + sorting;
 
-  if(k == sortingArray.length-1)
-  {
+  if(k === sortingArray.length-1) {
     k = 0;
   }
-  else
-  {
+  else {
     k += 1;
   }
 
   loadData();
 }
 
-var changeSFilter = function()
-{
-  if(shortnessFilter == false)
-  {
+var changeSFilter = function() {
+  if(shortnessFilter == false) {
     shortnessFilter = true;
     document.getElementById("sLimitChangeA").innerHTML = "Shortness filter on";
   }
-  else
-  {
+  else {
     shortnessFilter = false;
     document.getElementById("sLimitChangeA").innerHTML = "Shortness filter off";
   }
@@ -128,15 +125,12 @@ var changeSFilter = function()
   listPosts(list);
 }
 
-var changeNSFWFilter = function()
-{
-  if(nsfwFilter == false)
-  {
+var changeNSFWFilter = function() {
+  if(nsfwFilter === false) {
     nsfwFilter = true;
     document.getElementById("NSFWChangeA").innerHTML = "NSFW filter on";
   }
-  else
-  {
+  else {
     nsfwFilter = false;
     document.getElementById("NSFWChangeA").innerHTML = "NSFW filter off";
   }
@@ -145,31 +139,25 @@ var changeNSFWFilter = function()
 }
 
 var i = 0; //The var to cycle through colors
-var changeColor = function()
-{
+var changeColor = function() {
   document.getElementById("header").style.backgroundColor = colorArray[i];
   document.getElementById("header_menu").style.backgroundColor = colorArray[i];
-  if(i == colorArray.length-1)
-  {
+  if(i === colorArray.length-1) {
     i = 0;
   }
-  else
-  {
+  else {
     i += 1;
   }
 }
 
 var j = 0; //The var to cycle through limit numbers
-var changePostLimit = function()
-{
+var changePostLimit = function() {
   postLimit = limitArray[j];
   document.getElementById("PostLimitChangeA").innerHTML = "Post limit: " + postLimit;
-  if(j == limitArray.length-1)
-  {
+  if(j === limitArray.length-1) {
     j = 0;
   }
-  else
-  {
+  else {
     j += 1;
   }
 
