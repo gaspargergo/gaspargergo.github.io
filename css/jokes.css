@@ -51,8 +51,15 @@ body{
 				margin-right: 2%;
 				z-index: -1;
 			}
+				.header_menuitem a{
+					-webkit-transition: color 0.5s ease-out;
+  					-moz-transition: color 0.5s ease-out;
+  					-o-transition: color 0.5s ease-out;
+  					transition: color 0.5s ease-out;
+				}
 				.header_menuitem a:hover{
 					cursor: pointer;
+					color: #E0E0E0;
 				}
 
 #content{
@@ -72,4 +79,11 @@ body{
 		margin-top: 25px;
 		margin-bottom: 40px;
 	}
+
+.show {
+  transition: opacity 400ms;
+}
+.hide {
+  opacity: 0;
+}
 		
