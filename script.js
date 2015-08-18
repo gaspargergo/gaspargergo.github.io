@@ -29,8 +29,6 @@ var loadData = function()
   {
     urlToLoad = "https://www.reddit.com/r/jokes" + sorting + ".json" + "?limit=" + (postLimit+ 25);
   }
-  console.log(postLimit);
-  console.log(urlToLoad);
 
   $.getJSON(urlToLoad, function(json){
     list = json.data.children;
