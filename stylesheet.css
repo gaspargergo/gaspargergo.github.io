@@ -16,9 +16,7 @@ a{
   color: white;
   font-size: 250%;
   font-family: Montserrat;
-  margin-top: 30px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 5% auto 3% auto;
   height: 100px;
   width: 130px;
   padding-left: 10px;
@@ -35,15 +33,13 @@ a{
   padding: 20px;
 }
 #project-container{
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 10%;
+  margin: 5% auto 10% auto;
   width: 70%;
   overflow: hidden;
 }
   .project-div{
     float: left;
-    margin-left: 40px;
+    margin-left: 5%;
     margin-top: 20px;
     margin-bottom: 30px;
     background-color: #00695C;
@@ -72,9 +68,7 @@ a{
 .button-container{
   display: flex;
   justify-content: center;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 20px;
+  margin: 5% auto 5% auto;
 }
 .button{
   height: 35px;
@@ -86,7 +80,7 @@ a{
   font-family: Montserrat;
   font-size: 125%;
   color: white;
-  margin-left: 10px;
+  margin-left: 2%;
   border-radius: 3px;
   transition: all 0.35s ease;
 }
