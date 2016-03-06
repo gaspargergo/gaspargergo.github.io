@@ -1,5 +1,5 @@
 body {
-  
+
   background-color: #009688;
 }
 a {
@@ -71,7 +71,6 @@ a {
   .project-div:hover {
     padding-left: 25%;
     padding-right: 25%;
-    box-shadow: 0px 10px 6px -6px black;
   }
 
 
