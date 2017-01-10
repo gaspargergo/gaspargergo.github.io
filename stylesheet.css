@@ -91,8 +91,17 @@ a {
   background-color: #455A64;
 }
 
-#random-tasks {
-  background-color: #3F51B5;
+#tomorrow {
+  background-color: #f44336;
+}
+
+#translate {
+  background-color: #4d90fe;
+}
+
+#auto-pattern {
+  background-color: white;
+  color: black;
 }
 
 /*FOOTER BUTTONS*/
