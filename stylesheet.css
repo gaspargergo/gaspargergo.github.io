@@ -103,29 +103,3 @@ a {
   background-color: white;
   color: black;
 }
-
-/*FOOTER BUTTONS*/
-.button-container {
-  display: flex;
-  justify-content: center;
-  margin: 5% auto 2% auto;
-}
-.button {
-  height: 35px;
-  padding: 7px;
-  text-decoration: none;
-  float: left;
-  text-align: center;
-  line-height: 35px;
-  font-family: Montserrat;
-  font-size: 125%;
-  color: white;
-  margin-left: 2%;
-  border-radius: 3px;
-  transition: all 0.35s ease;
-}
-  .button:hover {
-    text-decoration: none;
-     color: white;
-     box-shadow: 0px 0px 2px 1px white;
-  }
