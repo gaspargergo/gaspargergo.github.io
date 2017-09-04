@@ -34,6 +34,8 @@
     <section id="title">
       <strong>My Projects</strong>
     </section>
+
+    <canvas id="canvas" height="200px" width="200px" hidden></canvas>
     
     <section id="projects">
       <a href="http://gaspargergo.github.io/JScalc/">
@@ -132,5 +134,45 @@
         </mark>
       </a><br><br>
     </section>
+
+    <script>
+
+
+    var c=document.getElementById("canvas");
+    var ctx=c.getContext("2d");
+    ctx.clearRect(0, 0, c.width, c.height);
+
+    function spawnCircles(){
+    ctx.clearRect(0, 0, c.width, c.height);
+    ctx.fillStyle = "#f9f9f9";
+    ctx.fillRect(0, 0, c.width, c.height);
+    var num = randomIntFromInterval(5,9);
+
+    for(var i = 0; i < num; i++){
+      var x = randomIntFromInterval(2,c.width-2);
+      var y = randomIntFromInterval(2,c.height-2);
+      var size = 2;
+      ctx.fillStyle = '#'+ Math.random().toString(16).slice(-6);
+      ctx.beginPath();
+      ctx.arc(x,y,size,0,2*Math.PI);
+      ctx.fill();
+    }
+
+    setBackground();
+  }
+
+  function randomIntFromInterval(min,max)
+  {
+    return Math.floor(Math.random()*(max-min+1)+min);
+  }
+
+  function setBackground(){
+    var img = c.toDataURL();
+    document.body.style.background = "url(" +img+ ")";
+  }
+
+  spawnCircles();
+
+    </script>
 </body>
 </html>
