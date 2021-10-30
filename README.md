@@ -1,3 +1,3 @@
 # Portfolio site
 
-This is my first, and most likely worst portfolio site! The projects are in the works!
+This is my (WIP) home site. Stuff I read, like, see, etc.
