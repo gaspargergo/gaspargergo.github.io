@@ -1,16 +1,441 @@
-<!doctype HTML>
 <html>
 <head>
-    <title>Megymagy's home</title>
-    <link href='style.css' rel='stylesheet' type='text/css'>
+  <title>Projects</title>
+  <link href="https://fonts.googleapis.com/css?family=Bungee+Hairline|Inconsolata" rel="stylesheet">
+  <style>
+    #title {
+      font-size: 36px;
+      font-family: Bungee Hairline;
+      padding: 10px;
+      font-weight: bold;
+    }
+
+    a {
+      text-decoration: none;
+      margin-bottom: 20px;
+      margin-left: 20px;
+    }
+
+    .item {
+      text-decoration: none;
+      padding-left: 3px;
+      padding-right: 3px;
+      font-size: 24px;
+      font-family: Inconsolata;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .item:hover {
+      text-decoration: underline;
+    }
+
+    .menu-header { /*The button which opens the collapsed div*/
+      border: none;
+      margin-left: 20px;
+      margin-top: 20px;
+    }
+
+    .active, .menu-header:hover {
+      text-decoration: underline;
+    }
+
+    .collapsible { /*Div to be collapsed, holding menu-items*/
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.2s ease-out;
+    }
+
+    .menu-item {
+      margin-left: 40px;
+    }
+
+
+  </style>
 </head>
 <body>
-    <h1>Magymagy's home</h1>
-    <p>Hi! this is my small personal digital garden. It's a work in progress!
-    <ul id="menu">
-		<li><a href="">gardening</a></li>
-		<li><a href="">research</a></li>
-		<li><a href="">programming</a></li>
-    </ul>
+  <div id="wrapper">
+    <section id="title">
+      <strong>Projects</strong>
+    </section>
+
+    <canvas id="canvas" height="200px" width="200px" hidden></canvas>
+    
+    <section id="projects">
+    <!--TEXT MANIPULATION-->
+    <button class="menu-header item" type="button" style="background-color: #9f9f9f; color: white">
+      Text Manipulation
+    </button>
+
+      <div class="collapsible" id="text-manipulation">
+        <a class="menu-item" href="http://gaspargergo.github.io/cutup/">
+          <mark class="item" style="background-color: #9f9f9f; color: white">
+            Cut-up
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/RDD/">
+          <mark class="item" style="background-color: #ffdd00; color: #02bd3a">
+            Random Deletion Device
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/textSound/">
+          <mark class="item" style="background-color:  #aac178; color: black;">
+            Text to Sound
+          </mark>
+        </a><br><br>
+      </div>
+    <!--IMAGE MANIPULATION-->
+    <button class="menu-header item" type="button" style="background-color: #aac178; color: black;">
+      Image Manipulation
+    </button>
+
+    <div class="collapsible" id="image-manipulation">
+        <a class="menu-item" href="http://gaspargergo.github.io/Spinner/">
+          <mark class="item" style="background-color: #aac178; color: black">
+            Spinner
+          </mark>
+        </a><br><br>
+     </div>
+    <!--INSTANT ART-->
+    <button class="menu-header item" type="button" style="background-color: #e44595; color: white;">
+      Instant Arts
+    </button>
+
+    <div class="collapsible" id="instant-art">
+        <a class="menu-item" href="http://gaspargergo.github.io/randomArt/">
+          <mark class="item" style="background-color: #e44595; color: white">
+            Instant Art
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/IAmondrian/">
+          <mark class="item" style="background-color: #444e99; color: white">
+            Instant Art with primary colors
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/IAlessColor/">
+          <mark class="item" style="background-color: #008e5b; color: white">
+            Instant Art with secondary & terciary colors
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/IABW/">
+          <mark class="item" style="background-color: #656565; color: white">
+            B&W Instant Art
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/reinhardt/">
+          <mark class="item" style="background-color: grey; color: black">
+            Instant Art with dark colors
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/IAGradients/">
+          <mark class="item" style="color: white; background: -webkit-linear-gradient(left, #aa1eb0 0%,#f3364b 100%);">
+            Instant Art with gradients
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/IACircles/">
+          <mark class="item" style="background-color: #faca2f; color: white;">
+            Instant Art with circles
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/IAC/">
+          <mark class="item" style="background-color: #585c74; color: white;">
+            Instant Art with centered lines
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/IALines/">
+          <mark class="item" style="background-color: transparent;border: 3px black solid; color: black;">
+            Instant Art with lines
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/IACurve/">
+          <mark class="item" style="background-color: #8e6bed; color: white;">
+            Instant Art with curved lines
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/IARandom/">
+          <mark class="item" style="background-color: #bd7a46; color: white">
+            Instant Art with shapes
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/IAGeo/">
+          <mark class="item" style="background-color: #a6f74e; color: black;">
+            Instant Art with ordered shapes
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/IACubes/">
+          <mark class="item" style="background-color: #f78521; color: white; box-shadow: 4px 4px #fbb06e;">
+            Instant Art with cubes
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/LastIA/">
+          <mark class="item" style="background-color: #c61c8b; color: white;">
+            Instant Art to end all Instant Arts
+          </mark>
+        </a><br><br>
+    </div>
+    <!--INSTANT PATTERNS-->
+    <button class="menu-header item" type="button" style="background-color: #ed1153; color: white;">
+      Instant Patterns
+    </button>
+
+    <div class="collapsible" id="instant-patterns">
+        <a class="menu-item" href="http://gaspargergo.github.io/IAStripes/">
+          <mark class="item" style="background-color: #ed1153; color: white;">
+            Instant Striped Patterns
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/AutoPattern/">
+          <mark class="item" style="background-color: black; color: white">
+            Instant Line Patterns
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/IASomething/">
+          <mark class="item" style="background-color: #0109c4; color: white;">
+            Instant IA Patterns
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/ShapePatterns/">
+          <mark class="item" style="background-color: #4b1633; color: white;">
+            Instant Straight Edge Patterns
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/curvedPatterns/">
+          <mark class="item" style="background-color: #28e1a8; color: black;">
+            Instant Curved Edge Patterns
+          </mark>
+        </a><br><br>
+    </div>
+    <!--Hommage to Türk Péter-->
+    <button class="menu-header item" type="button" style="background-color: black; color: white;">
+      Hommage to Türk Péter
+    </button>
+
+    <div class="collapsible" id="turk-peter">
+        <a class="menu-item" href="http://gaspargergo.github.io/TP1/">
+          <mark class="item" style="background-color: black; color: white;">
+            TürkPéter1
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/TP2/">
+          <mark class="item" style="background-color: black; color: white;">
+            TürkPéter2
+          </mark>
+        </a><br><br>
+    </div>
+    <!--SHAPES-->
+    <button class="menu-header item" type="button" style="background-color: #54775c; color: white;">
+      Shapes
+    </button>
+
+    <div class="collapsible" id="shapes">
+        <a class="menu-item" href="http://gaspargergo.github.io/shapes/">
+          <mark class="item" style="background-color: #54775c; color: white;">
+            Shapes (Allan McCollum)
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/RandomShapes/">
+          <mark class="item" style="background-color: #8df457; color: black;">
+            Random Shapes
+          </mark>
+        </a><br><br>
+    </div>
+    <!--SQUARES-->
+    <button class="menu-header item" type="button" style="background-color: #eae8bd; color: black;">
+      Squares
+    </button>
+
+    <div class="collapsible" id="squares">
+        <a class="menu-item" href="http://gaspargergo.github.io/square1/">
+          <mark class="item" style="background-color: #eae8bd; color: black;">
+            Square1
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/square2/">
+          <mark class="item" style="background-color: #eae8bd; color: black;">
+            Square2
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/square3/">
+          <mark class="item" style="background-color: #eae8bd; color: black;">
+            Square3
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/square4/">
+          <mark class="item" style="background-color: #eae8bd; color: black;">
+            Square4
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/square5/">
+          <mark class="item" style="background-color: #eae8bd; color: black;">
+            Square5
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/square6/">
+          <mark class="item" style="background-color: #eae8bd; color: black;">
+            Square6
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/square7/">
+          <mark class="item" style="background-color: #eae8bd; color: black;">
+            Square7
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/square8/">
+          <mark class="item" style="background-color: #eae8bd; color: black;">
+            Square8
+          </mark>
+        </a><br><br>
+    </div>
+    <!--DIAGONALS-->
+    <button class="menu-header item" type="button" style="background-color: #DC143C; color: white;">
+      Diagonals
+    </button>
+
+    <div class="collapsible" id="diagonals">
+        <a class="menu-item" href="http://gaspargergo.github.io/diagonal/">
+          <mark class="item" style="background-color: #DC143C; color: white;">
+            Diagonal
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/diagonal2/">
+          <mark class="item" style="background-color:  black; color: #efdb26;">
+            Diagonal 2
+          </mark>
+        </a><br><br>
+    </div>
+    <!--NATURE (TO BE DONE!!)-->
+    <button class="menu-header item" type="button" style="background-color:  #afeeee; color: #a06b3f;">
+      Nature
+    </button>
+
+    <div class="collapsible" id="nature">
+        <a class="menu-item" href="http://gaspargergo.github.io/flower/">
+          <mark class="item" style="background-color:  #afeeee; color: #a06b3f;">
+            Flower
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/landscape/">
+          <mark class="item" style="background-color:  #afeeee; color: #a06b3f;">
+            Landscape
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/leaves/">
+          <mark class="item" style="background-color:  #afeeee; color: #a06b3f;">
+            Leaves
+          </mark>
+        </a><br><br>
+    </div>
+    <!--THE REST-->
+    <button class="menu-header item" type="button" style="background-color: #784421; color: #e9c6af;">
+      Odds n' Ends
+    </button>
+
+    <div class="collapsible" id="nature">
+        <a class="menu-item" href="http://gaspargergo.github.io/shoes/">
+          <mark class="item" style="background-color: #784421; color: #e9c6af;">
+            Shoes
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/HappyCircles/">
+          <mark class="item" style="background-color: #840bee; color: white;">
+            Happy Circles
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/littleDot/">
+          <mark class="item" style="background-color: #77e9ea; color: white;">
+            Little Dot
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/emojitext/">
+          <mark class="item" style="background-color: #3E2F5B; color: white">
+            Emoji Text&#x1F349
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/SelfD/">
+          <mark class="item" style="background-color: #b33a3a; color: white;">
+            Selbstdestruktion
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/runningText/">
+          <mark class="item" style="background-color: #fff0d6; color: black;">
+            Running text
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/JScalc/">
+          <mark class="item" style="background-color: #880E4F; color: white">
+            JS calculator
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/RedditJokes/">
+          <mark class="item" style="background-color: #4CAF50; color: white">
+            Jokes from Reddit
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/translate/">
+          <mark class="item" style="background-color: #4d90fe; color: white">
+            Ancient Hungarian
+          </mark>
+        </a><br><br>
+        <a class="menu-item" href="http://gaspargergo.github.io/writer/">
+          <mark class="item" style="background-color: #efebe9; color: black">
+            Automatic Writer
+          </mark>
+        </a><br><br>
+    </div>
+
+    </section>
+
+    <script>
+
+
+    var c=document.getElementById("canvas");
+    var ctx=c.getContext("2d");
+    ctx.clearRect(0, 0, c.width, c.height);
+
+    function spawnCircles(){
+    ctx.clearRect(0, 0, c.width, c.height);
+    ctx.fillStyle = "#f9f9f9";
+    ctx.fillRect(0, 0, c.width, c.height);
+    var num = randomIntFromInterval(5,9);
+
+    for(var i = 0; i < num; i++){
+      var x = randomIntFromInterval(2,c.width-2);
+      var y = randomIntFromInterval(2,c.height-2);
+      var size = 2;
+      ctx.fillStyle = '#'+ Math.random().toString(16).slice(-6);
+      ctx.beginPath();
+      ctx.arc(x,y,size,0,2*Math.PI);
+      ctx.fill();
+    }
+
+    setBackground();
+  }
+
+  function randomIntFromInterval(min,max)
+  {
+    return Math.floor(Math.random()*(max-min+1)+min);
+  }
+
+  function setBackground(){
+    var img = c.toDataURL();
+    document.body.style.background = "url(" +img+ ")";
+  }
+  //Creating the background
+  spawnCircles();
+
+  //collapsible code
+  var coll = document.getElementsByClassName("menu-header");
+
+  for (var i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var content = this.nextElementSibling;
+      if (content.style.maxHeight){
+        content.style.maxHeight = null;
+      } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+      }
+    });
+  }
+    </script>
 </body>
 </html>
