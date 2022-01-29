@@ -1,0 +1,217 @@
+<!doctype HTML>
+<html>
+
+<head>
+  <title>instant Art</title>
+  <link href="https://fonts.googleapis.com/css?family=Alfa+Slab+One&display=swap" rel="stylesheet">
+
+  <style>
+    #title {
+      font-family: 'Alfa Slab One', sans-serif;
+      font-size: 50px;
+      color: black;
+      background-color: white;
+      letter-spacing: -2px;
+      margin-top: 1000px;
+    }
+    
+    span{
+      transition: all 0.5s ease-in-out;
+    }
+
+    a:hover{
+      cursor: pointer;
+    }
+
+    center{
+      margin-top: 50px;
+    }
+
+    canvas{
+      visibility:hidden;
+    }
+
+    #pic{
+      position: fixed;
+    }
+
+  </style>
+</head>
+
+<body>
+  <center><a id="title" onClick="colorPixels()">instant patterns</a>
+
+  <div id="container"><canvas id="canvas" height="600px" width="600px"></canvas></div>
+
+  <canvas id="pic" height="600px" width="600px"></canvas>
+
+</center>
+
+
+
+  <script>
+
+  document.addEventListener('mousedown', function (event) {
+    if (event.detail > 1) {
+      event.preventDefault();
+      }
+    }, false);
+
+  var c=document.getElementById("canvas");
+  var ctx=c.getContext("2d");
+  ctx.clearRect(0, 0, c.width, c.height);
+  var sizes = [4,9,25,100,400,900]; //for setting the number of pixels in a unit
+  var pixelArrayCounter = 2;
+  var pixelSize = c.height/(Math.sqrt(sizes[pixelArrayCounter]));
+
+  function colorPixels(){
+    pixelArrayCounter = Math.floor(Math.random() * sizes.length); //choosing random size
+    console.log(pixelArrayCounter);
+    pixelSize = c.height/(Math.sqrt(sizes[pixelArrayCounter]));
+
+    var colors = []; //creating color array and adding the two random colors
+    for(var i = 0; i < 2; i++){
+      colors.push('#'+ Math.random().toString(16).slice(-6));
+    }
+    
+    var x = 0; //drawing the base of the pattern
+    var y = 0;
+    ctx.clearRect(0, 0, c.width, c.height);
+    for(var i = 0; i < sizes[pixelArrayCounter]; i++){
+      ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+      ctx.fillRect(x,y,pixelSize,pixelSize);
+      if(x == c.width-pixelSize){
+        x = 0;
+        y += pixelSize;
+      }
+      else{
+        x += pixelSize;
+      }
+    }
+    var temp = document.getElementById("pic");
+    var tempContext = temp.getContext("2d");
+
+    //drawing the pattern block in anther canvas
+    switch(Math.floor(Math.random()*4)){
+      case 0:
+        //normal, no flip
+        tempContext.drawImage(c,0,0,c.width/2,c.width/2);
+        tempContext.drawImage(c,c.width/2,0,c.width/2,c.width/2);
+        tempContext.drawImage(c,0,c.width/2,c.width/2,c.width/2);
+        tempContext.drawImage(c,c.width/2,c.width/2,c.width/2,c.width/2);
+        break;
+      case 1:
+        //simple horizontal flip
+        tempContext.save(); 
+        tempContext.drawImage(c, 0,0,temp.width/2,temp.width/2);
+        tempContext.scale(-1, 1); 
+        tempContext.drawImage(c, -temp.width,0,temp.width/2,temp.width/2); 
+
+        tempContext.drawImage(c, -temp.width,temp.width/2,temp.width/2,temp.width/2);
+        tempContext.scale(-1, 1); 
+        tempContext.drawImage(c, 0,temp.width/2,temp.width/2,temp.width/2); 
+        tempContext.restore(); 
+        break;
+      case 2:
+        //simple horizontal flip & slide
+        tempContext.save();
+        tempContext.drawImage(c, 0,0,temp.width/2,temp.width/2);
+        tempContext.scale(-1, 1); 
+        tempContext.drawImage(c, -temp.width,0,temp.width/2,temp.width/2); 
+
+        tempContext.drawImage(c, -temp.width/2,temp.width/2,temp.width/2,temp.width/2);
+        tempContext.scale(-1, 1); 
+        tempContext.drawImage(c, temp.width/2,temp.width/2,temp.width/2,temp.width/2);
+        tempContext.restore(); 
+        break;
+      case 3:
+        //horizontal & vertical flip
+        tempContext.save();
+        tempContext.drawImage(c, 0,0,temp.width/2,temp.width/2);
+        tempContext.scale(-1, 1); 
+        tempContext.drawImage(c, -temp.width,0,temp.width/2,temp.width/2); 
+
+        tempContext.scale(-1,-1);
+        tempContext.drawImage(c, 0,-temp.width,temp.width/2,temp.width/2);
+
+        tempContext.scale(-1,1);
+        tempContext.drawImage(c, -temp.width,-temp.width,temp.width/2,temp.width/2);
+        tempContext.restore(); 
+    }
+
+
+    ctx.clearRect(0,0,c.height,c.width);
+    for(var k = 0; k < 2; k++){
+      for(var i = 0; i < 2;i++){
+        ctx.drawImage(temp,300*i,k*300,300,300);
+      }
+    }
+
+    setBackground();
+
+  }
+
+  function setBackground(){
+    var img = c.toDataURL();
+    document.body.style.background = "url(" +img+ ")";
+  }
+
+  function download(){
+    saveAsPNG(c,'stripes');
+  }
+
+  function saveAsPNG(image, filename){ // No IE <11 support. Chrome URL bug for large images may crash
+    var anchorElement, event, blob;
+    function image2Canvas(image){  // converts an image to canvas
+        function createCanvas(width, height){  // creates a canvas of width height
+            var can = document.createElement("canvas");
+            can.width = width;
+            can.height = height;
+            return can;
+        };
+        var newImage = canvas(img.width, img.height); // create new image
+        newImage.ctx = newImage.getContext("2d");  // get image context
+        newImage.ctx.drawImage(image, 0, 0); // draw the image onto the canvas
+        return newImage;  // return the new image
+    }
+    if(image.toDataURL === undefined){    // does the image have the toDataURL function
+        image = image2Canvas(image);  // No then convert to canvas
+    }
+    // if msToBlob and msSaveBlob then use them to save. IE >= 10
+    // As suggested by Kaiido 
+    if(image.msToBlob !== undefined && navigator.msSaveBlob !== undefined){ 
+       blob = image.msToBlob(); 
+       navigator.msSaveBlob(blob, filename + ".png"); 
+       return;
+    }
+    anchorElement = document.createElement('a');  // Create a download link
+    anchorElement.href = image.toDataURL();   // attach the image data URL
+    // check for download attribute
+    if ( anchorElement.download !== undefined ) {
+        anchorElement.download = filename + ".png";  // set the download filename
+        if (typeof MouseEvent === "function") {   // does the browser support the object MouseEvent
+            event = new MouseEvent(   // yes create a new mouse click event
+                "click", {
+                    view        : window,
+                    bubbles     : true,
+                    cancelable  : true,
+                    ctrlKey     : false,
+                    altKey      : false,
+                    shiftKey    : false,
+                    metaKey     : false,
+                    button      : 0,
+                    buttons     : 1,
+                }
+            );
+            anchorElement.dispatchEvent(event); // simulate a click on the download link.
+        } else
+        if (anchorElement.fireEvent) {    // if no MouseEvent object try fireEvent 
+            anchorElement.fireEvent("onclick");
+        }
+    }
+}
+
+  </script>
+</body>
+
+</html>

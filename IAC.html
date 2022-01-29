@@ -1,0 +1,89 @@
+<!doctype HTML>
+<html>
+
+<head>
+  <title>instant Art</title>
+  <link href="https://fonts.googleapis.com/css?family=Shrikhand" rel="stylesheet">
+
+  <style>
+    #title {
+      font-family: Shrikhand, cursive;
+      font-size: 50px;
+      color: black;
+      letter-spacing: 3px;
+      margin-top: 1000px;
+      transition: all 0.5s ease-in-out;
+    }
+
+
+    a:hover{
+      cursor: pointer;
+    }
+
+    #title:hover{
+      color: #444e99;
+    }
+
+    center{
+      margin-top: 50px;
+    }
+
+    canvas{
+      margin-top: 60px;
+      box-shadow: 5px 5px 16px 0px rgba(171,171,171,0.82);
+    }
+
+
+  </style>
+</head>
+
+<body>
+  <center><a id="title" onClick="colorPixels()">instant <span>ART</span></a>
+
+  <div id="container"><canvas id="canvas" height="600px" width="600px"></canvas></div>
+</center>
+
+
+
+  <script>
+
+  document.addEventListener('mousedown', function (event) {
+    if (event.detail > 1) {
+      event.preventDefault();
+      }
+    }, false);
+
+  var c=document.getElementById("canvas");
+  var ctx=c.getContext("2d");
+  ctx.clearRect(0, 0, c.width, c.height);
+
+  function colorPixels(){
+    ctx.clearRect(0, 0, c.width, c.height);
+
+    ctx.fillStyle = '#'+ Math.random().toString(16).slice(-6);
+    ctx.fillRect(0,0,c.width,c.height);
+    ctx.strokeStyle = '#'+ Math.random().toString(16).slice(-6);
+    ctx.lineWidth = Math.floor(Math.random()*9)+1;
+
+    var deg = 270;
+    var rad = 700;
+    var speed = Math.floor(Math.random()*100)+1;
+    var rounds = Math.floor(Math.random()*7)+1;
+
+    for(var i = 0; i < rounds;i++){
+      while(deg <= 630){
+        ctx.beginPath();
+        ctx.moveTo(300,300);
+        ctx.lineTo(300+rad * Math.cos(deg * (Math.PI / 180)),300+rad * Math.sin(deg * (Math.PI / 180)));
+        ctx.stroke();
+        deg += speed;
+      }
+      speed = Math.floor(Math.random()*100)+1;
+      deg = 270;
+    }
+  }
+  
+  </script>
+</body>
+
+</html>

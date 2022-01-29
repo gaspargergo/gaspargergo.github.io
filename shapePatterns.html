@@ -1,0 +1,196 @@
+<!doctype HTML>
+<html>
+
+<head>
+  <title>instant Art</title>
+  <link href="https://fonts.googleapis.com/css?family=Alfa+Slab+One&display=swap" rel="stylesheet">
+
+  <style>
+    #title {
+      font-family: 'Alfa Slab One', sans-serif;
+      font-size: 50px;
+      color: white;
+      letter-spacing: -2px;
+      margin-top: 1000px;
+      background-color: black;
+    }
+
+    a:hover{
+      cursor: pointer;
+    }
+
+    center{
+      margin-top: 50px;
+    }
+
+    canvas{
+      visibility: hidden;
+      margin-top: 60px;
+      box-shadow: 5px 5px 16px 0px rgba(171,171,171,0.82);
+    }
+
+
+    #pic{
+      position: fixed;
+    }
+
+  </style>
+</head>
+
+<body>
+  <center><a id="title" onClick="colorPixels()">instant patterns</a>
+
+  <div id="container"><canvas id="canvas" height="600px" width="600px"></canvas></div>
+
+  <canvas id="pic" height="600px" width="600px"></canvas>
+
+</center>
+
+  <script>
+
+  document.addEventListener('mousedown', function (event) {
+    if (event.detail > 1) {
+      event.preventDefault();
+      }
+    }, false);
+
+  var c=document.getElementById("canvas");
+  var ctx=c.getContext("2d");
+  ctx.clearRect(0, 0, c.width, c.height);
+
+  function makeBase(){
+    var x = 0;
+    var y = 0;
+    var pointTypes = []; 
+    var points = [];
+    /*
+             1
+        -----------
+        |         |
+        |         |
+      4 |         | 2
+        |         |
+        -----------
+             3
+    */
+    var numOfPoints = Math.floor(Math.random()*4)+4;
+    for(var i = 0; i < numOfPoints; i++){
+      var temp = Math.floor(Math.random()*4)+1;
+      if(i >= 1){
+        while(temp == pointTypes[i-1]){
+          temp = Math.floor(Math.random()*4)+1;
+        }
+      }
+      pointTypes.push(temp);
+    }
+    
+    for(var i = 0; i < pointTypes.length; i++){
+      var temp = Math.floor(Math.random()*c.width);
+
+      switch(pointTypes[i]){
+        case 1:
+          points.push({x:temp,y:0});
+          break;
+        case 2:
+          points.push({x:c.width,y:temp});
+          break;
+        case 3:
+          points.push({x:temp,y:c.height});
+          break;
+        case 4:
+          points.push({x:0,y:temp});
+          break;
+      }
+    }
+
+    ctx.clearRect(0, 0, c.width, c.height);
+    ctx.fillStyle = '#'+ Math.random().toString(16).slice(-6);
+    ctx.fillRect(0, 0, c.width, c.height);
+    ctx.fillStyle = '#'+ Math.random().toString(16).slice(-6);
+
+    ctx.beginPath();
+    for(var i = 0; i < points.length;i++){
+      if(i == 0){
+        ctx.moveTo(points[i].x,points[i].y);
+      }
+      else if(i == points.length-1){
+        ctx.lineTo(points[0].x,points[0].y);
+      }
+      else{
+        ctx.lineTo(points[i].x,points[i].y);
+      }
+    }
+    ctx.fill();
+  }
+
+  function colorPixels(){
+    makeBase();
+    var temp = document.getElementById("pic");
+    var tempContext = temp.getContext("2d");
+
+    //drawing the pattern block in anther canvas
+    switch(Math.floor(Math.random()*4)){
+      case 0:
+        //normal, no flip
+        tempContext.drawImage(c,0,0,c.width/2,c.width/2);
+        tempContext.drawImage(c,c.width/2,0,c.width/2,c.width/2);
+        tempContext.drawImage(c,0,c.width/2,c.width/2,c.width/2);
+        tempContext.drawImage(c,c.width/2,c.width/2,c.width/2,c.width/2);
+        break;
+      case 1:
+        //simple horizontal flip
+        tempContext.save(); 
+        tempContext.drawImage(c, 0,0,c.width/2,c.width/2);
+        tempContext.scale(-1, 1); 
+        tempContext.drawImage(c, -c.width,0,c.width/2,c.width/2); 
+
+        tempContext.drawImage(c, -c.width,c.width/2,c.width/2,c.width/2);
+        tempContext.scale(-1, 1); 
+        tempContext.drawImage(c, 0,c.width/2,c.width/2,c.width/2); 
+        tempContext.restore(); 
+        break;
+      case 2:
+        //simple horizontal flip & slide
+        tempContext.save();
+        tempContext.drawImage(c, 0,0,c.width/2,c.width/2);
+        tempContext.scale(-1, 1); 
+        tempContext.drawImage(c, -c.width,0,c.width/2,c.width/2); 
+
+        tempContext.drawImage(c, -c.width/2,c.width/2,c.width/2,c.width/2);
+        tempContext.scale(-1, 1); 
+        tempContext.drawImage(c, c.width/2,c.width/2,c.width/2,c.width/2);
+        tempContext.restore(); 
+        break;
+      case 3:
+        //horizontal & vertical flip
+        tempContext.save();
+        tempContext.drawImage(c, 0,0,c.width/2,c.width/2);
+        tempContext.scale(-1, 1); 
+        tempContext.drawImage(c, -c.width,0,c.width/2,c.width/2); 
+
+        tempContext.scale(-1,-1);
+        tempContext.drawImage(c, 0,-c.width,c.width/2,c.width/2);
+
+        tempContext.scale(-1,1);
+        tempContext.drawImage(c, -c.width,-c.width,c.width/2,c.width/2);
+        tempContext.restore(); 
+    }
+
+    ctx.clearRect(0,0,c.height,c.width);
+    for(var k = 0; k < 3; k++){
+      for(var i = 0; i < 3;i++){
+        ctx.drawImage(temp,200*i,k*200,200,200);
+      }
+    }
+    setBackground();
+  }
+
+  function setBackground(){
+    var img = c.toDataURL();
+    document.body.style.background = "url(" +img+ ")";
+  }    
+
+  </script>
+</body>
+
+</html>

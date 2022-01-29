@@ -1,0 +1,328 @@
+<!doctype HTML>
+<html>
+
+<head>
+  <title>Türk Péter</title>
+  <link href="https://fonts.googleapis.com/css?family=Shrikhand" rel="stylesheet">
+
+  <style>
+    #title {
+      font-family: Shrikhand, cursive;
+      font-size: 50px;
+      color: black;
+      letter-spacing: 3px;
+      margin-top: 1000px;
+      transition: all 0.5s ease-in-out;
+    }
+
+    span{
+      transition: all 0.5s ease-in-out;
+    }
+
+    a:hover{
+      cursor: pointer;
+    }
+
+    #title:hover{
+      color: #ffc107;
+    }
+
+    #title:hover span{
+      color: #ff0000;
+    }
+
+    center{
+      margin-top: 50px;
+    }
+
+    canvas{
+      margin-top: 60px;
+      box-shadow: 5px 5px 16px 0px rgba(171,171,171,0.82);
+      border: 4px solid black;
+    }
+
+    #text{
+      position: static;
+      font-size: 14px;
+      letter-spacing: 1px;
+      font-family: Shrikhand, cursive;
+      color: red;
+      margin-left: 300px;
+      margin-top: -20px;
+      transform: rotate(-20deg);
+      transition: all 0.5s ease-in-out;
+    }
+
+    #text:hover{
+      transform: rotate(-25deg);
+    }
+
+    @-webkit-keyframes rotate {
+      from {
+        -webkit-transform: rotate(0deg);
+      }
+      to { 
+        -webkit-transform: rotate(360deg);
+      }
+    }
+
+
+  </style>
+</head>
+
+<body>
+  <center>
+  <div id="container"><canvas id="canvas" height="600px" width="600px"></canvas></div>
+
+</center>
+
+
+
+  <script>
+
+  document.addEventListener('mousedown', function (event) {
+    if (event.detail > 1) {
+      event.preventDefault();
+      }
+    }, false);
+
+  var c=document.getElementById("canvas");
+  var ctx=c.getContext("2d");
+  ctx.clearRect(0, 0, c.width, c.height);
+  //fixed size: 20x20, therefore each little "pixel" is 30px x 30px
+  var numOfPixels = 400;
+  var pixelSize = c.height/Math.sqrt(numOfPixels); //the number of shapes in a picture (refreshed in every colorPixels call)
+
+  colorPixels();
+
+  function colorPixels(seq){ //seq = an array of shape types
+    var x = 0;
+    var y = 0;
+    pixelSize = c.height/Math.sqrt(numOfPixels); 
+    var direction = 0; //0 = right, 1 = down, 2 = leftFromLine, 3 = up | The way the drawing is headed
+    var lineLength = c.width/pixelSize; //how many shapes in a line
+    ctx.clearRect(0, 0, c.width, c.height);
+    ctx.lineWidth = pixelSize/10; //arbitrary number, this looks good
+
+    var types = 0;
+    var temp = [];
+
+    if(!seq){ //if no input sequence, generating a random one
+        types = Math.floor(Math.random() * (Math.sqrt(numOfPixels) - 2) + 3); //generates random number between 3 and 20, specifies the length of the sequence
+        for(var i = 0; i < types; i++){
+                temp.push(Math.floor(Math.random() * 15)); //generates random number between 0 and 14, picks shapes
+        }
+        seq = temp;
+    }
+    
+    var nextShape = 0;
+    var leftFromLine = lineLength-1; //how many shapes are left from drawing a line(one is there for compensation)
+    var lineCounter = 0; //Counting the amount being removed from the next line
+    var tempCounter = 0; //counter so the lineCounter grows only every other turn after the first one
+    for(var i = 0; i < numOfPixels; i++){
+
+        //drawing current shape and selecting new one
+        drawShape(seq[nextShape],x,y);      
+        if(nextShape == seq.length-1) nextShape = 0;
+        else nextShape++;
+
+        //movement
+        if(leftFromLine > 0){ //normal movement
+            switch(direction){
+                case 0:
+                    x += pixelSize;
+                    break;
+                case 1:
+                    y += pixelSize;
+                    break;
+                case 2:
+                    x -= pixelSize;
+                    break;
+                case 3:
+                    y -= pixelSize;
+                    break;
+            }
+            leftFromLine--;
+        }
+        else{ //when at the end of the line
+            if(lineCounter == 0) lineCounter++; //cheking if first line
+            else{ //if not first line, adding one to the linecounter every other line
+                if(tempCounter == 0) tempCounter++;
+                else{
+                    tempCounter = 0;
+                    lineCounter++;
+                }
+            }
+            leftFromLine = lineLength -1 - lineCounter; //always one less (one is there for compensation)
+
+            switch(direction){
+                case 0:
+                    y += pixelSize;
+                    direction++;
+                    break;
+                case 1:
+                    x -= pixelSize;
+                    direction++;
+                    break;
+                case 2:
+                    y -= pixelSize;
+                    direction++;
+                    break;
+                case 3:
+                    x += pixelSize;
+                    direction = 0;
+                    break;
+            }
+        }
+    }
+  }
+
+function drawShape(type,x,y){
+    switch(type){
+        case 0:
+            ctx.beginPath();
+            ctx.moveTo(x+pixelSize/2,y);
+            ctx.lineTo(x+pixelSize/2,y+pixelSize);
+            ctx.stroke();
+            break;
+        case 1:
+            ctx.beginPath();
+            ctx.moveTo(x,y+pixelSize/2);
+            ctx.lineTo(x+pixelSize,y+pixelSize/2);
+            ctx.stroke();
+            break;
+        case 2:
+            ctx.beginPath();
+            ctx.moveTo(x+pixelSize/2,y);
+            ctx.lineTo(x+pixelSize/2,y+pixelSize);
+            ctx.moveTo(x,y+pixelSize/2);
+            ctx.lineTo(x+pixelSize,y+pixelSize/2);
+            ctx.stroke();
+            break;
+        case 3:
+            ctx.beginPath();
+            ctx.moveTo(x,y+pixelSize);
+            ctx.lineTo(x+pixelSize,y);
+            ctx.stroke();
+            break;
+        case 4:
+            ctx.beginPath();
+            ctx.moveTo(x,y);
+            ctx.lineTo(x+pixelSize,y+pixelSize);
+            ctx.stroke();
+            break;
+        case 5:
+            ctx.beginPath();
+            ctx.moveTo(x,y);
+            ctx.lineTo(x+pixelSize,y+pixelSize);
+            ctx.moveTo(x,y+pixelSize);
+            ctx.lineTo(x+pixelSize,y);
+            ctx.stroke();
+            break;
+        case 6:
+            ctx.beginPath();
+            ctx.moveTo(x+pixelSize/2,y);
+            ctx.lineTo(x+pixelSize/2,y+pixelSize);
+            ctx.moveTo(x,y+pixelSize);
+            ctx.lineTo(x+pixelSize,y);
+            ctx.stroke();
+            break;
+        case 7:
+            ctx.beginPath();
+            ctx.moveTo(x+pixelSize/2,y);
+            ctx.lineTo(x+pixelSize/2,y+pixelSize);
+            ctx.moveTo(x,y);
+            ctx.lineTo(x+pixelSize,y+pixelSize);
+            ctx.stroke();
+            break;
+        case 8:
+            ctx.beginPath();
+            ctx.moveTo(x,y+pixelSize/2);
+            ctx.lineTo(x+pixelSize,y+pixelSize/2);
+            ctx.moveTo(x,y+pixelSize);
+            ctx.lineTo(x+pixelSize,y);
+            ctx.stroke();
+            break;
+        case 9:
+            ctx.beginPath();
+            ctx.moveTo(x,y+pixelSize/2);
+            ctx.lineTo(x+pixelSize,y+pixelSize/2);
+            ctx.moveTo(x,y);
+            ctx.lineTo(x+pixelSize,y+pixelSize);
+            ctx.stroke();
+            break;
+        case 10:
+            ctx.beginPath();
+            ctx.moveTo(x+pixelSize/2,y);
+            ctx.lineTo(x+pixelSize/2,y+pixelSize);
+            ctx.moveTo(x,y);
+            ctx.lineTo(x+pixelSize,y+pixelSize);
+            ctx.moveTo(x,y+pixelSize);
+            ctx.lineTo(x+pixelSize,y);
+            ctx.stroke();
+            break;
+        case 11:
+            ctx.beginPath();
+            ctx.moveTo(x,y+pixelSize/2);
+            ctx.lineTo(x+pixelSize,y+pixelSize/2);
+            ctx.moveTo(x,y);
+            ctx.lineTo(x+pixelSize,y+pixelSize);
+            ctx.moveTo(x,y+pixelSize);
+            ctx.lineTo(x+pixelSize,y);
+            ctx.stroke();
+            break;
+        case 12:
+            ctx.beginPath();
+            ctx.moveTo(x,y);
+            ctx.lineTo(x+pixelSize,y+pixelSize);
+            ctx.moveTo(x+pixelSize/2,y);
+            ctx.lineTo(x+pixelSize/2,y+pixelSize);
+            ctx.moveTo(x,y+pixelSize/2);
+            ctx.lineTo(x+pixelSize,y+pixelSize/2);
+            ctx.stroke();
+            break;
+        case 13:
+            ctx.beginPath();
+            ctx.moveTo(x,y+pixelSize);
+            ctx.lineTo(x+pixelSize,y);
+            ctx.moveTo(x+pixelSize/2,y);
+            ctx.lineTo(x+pixelSize/2,y+pixelSize);
+            ctx.moveTo(x,y+pixelSize/2);
+            ctx.lineTo(x+pixelSize,y+pixelSize/2);
+            ctx.stroke();
+            break;
+        case 14:
+            ctx.beginPath();
+            ctx.moveTo(x,y);
+            ctx.lineTo(x+pixelSize,y+pixelSize);
+            ctx.moveTo(x,y+pixelSize);
+            ctx.lineTo(x+pixelSize,y);
+            ctx.moveTo(x+pixelSize/2,y);
+            ctx.lineTo(x+pixelSize/2,y+pixelSize);
+            ctx.moveTo(x,y+pixelSize/2);
+            ctx.lineTo(x+pixelSize,y+pixelSize/2);
+            ctx.stroke();
+            break;
+      }
+}
+
+
+function drawEasterEgg(){
+    
+    switch(Math.round(Math.random())){
+        case 0:
+            numOfPixels = 400;
+            colorPixels([0,1,2,3,4,5,6,7,8,9]);
+            break;
+        case 1:
+            numOfPixels = 484;
+            colorPixels([0,1,2,3,4,5,2,2,6,7,10,2,8,9,11,13,12,14,5,5,5,5]);
+            break;
+    }
+  }
+
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,195 @@
+<!doctype HTML>
+<html>
+
+<head>
+  <title>instant Art</title>
+  <link href="https://fonts.googleapis.com/css?family=Shrikhand" rel="stylesheet">
+
+  <style>
+    #title {
+      font-family: Shrikhand, cursive;
+      font-size: 50px;
+      color: black;
+      letter-spacing: 3px;
+      margin-top: 1000px;
+      transition: all 0.5s ease-in-out;
+    }
+
+    span{
+      transition: all 0.5s ease-in-out;
+    }
+
+    a:hover{
+      cursor: pointer;
+    }
+
+    #title:hover{
+      color: #ff0000;
+    }
+
+    #title:hover span{
+      color: #444e99;
+    }
+
+    center{
+      margin-top: 50px;
+    }
+
+    canvas{
+      margin-top: 60px;
+      box-shadow: 5px 5px 16px 0px rgba(171,171,171,0.82);
+    }
+
+    #sizeMenu{
+      margin-top: 50px;
+      height: 60px;
+      width: 200px;
+      vertical-align: center;
+      line-height: 60px;
+      font-size: 30px;
+      font-family: Shrikhand, cursive;
+      opacity: 0.1;
+      transition: all 0.5s ease-in-out;
+    }
+
+    #sizeMenu a{
+      opacity: 0.05;
+      transition: all 0.5s ease-in-out;
+    }
+
+    #sizeMenu:hover{
+      opacity: 0.8;
+    }
+
+    #sizeMenu:hover a{
+      opacity: 0.8;
+    }
+
+    #text{
+      position: static;
+      font-size: 14px;
+      font-family: Shrikhand, cursive;
+      color: #ffc107;
+      margin-left: 300px;
+      margin-top: -20px;
+      transform: rotate(-20deg);
+      transition: all 0.5s ease-in-out;
+    }
+
+    #text:hover{
+      transform: rotate(-25deg);
+    }
+
+  </style>
+</head>
+
+<body>
+  <center><a id="title" onClick="colorPixels()">instant <span>ART</span></a>
+    <a onClick="draw('mondrian')"><p id="text">Just like Mondrian!</p></a>
+
+  <div id="container"><canvas id="canvas" height="600px" width="600px"></canvas></div>
+
+  <div id="sizeMenu">
+    <a onClick="changePixelSize('-')">-</a>
+    <span id="sizeNumber">100</span>
+    <a onClick="changePixelSize('+')">+</a>
+  </div>
+</center>
+
+
+
+  <script>
+
+  document.addEventListener('mousedown', function (event) {
+    if (event.detail > 1) {
+      event.preventDefault();
+      }
+    }, false);
+
+  var c=document.getElementById("canvas");
+  var ctx=c.getContext("2d");
+  ctx.clearRect(0, 0, c.width, c.height);
+  var sizes = [1,4,9,25,100,400,900,3600,10000,40000,90000,360000]; 
+  var pixelArrayCounter = 4;
+  var pixelSize = c.height/(Math.sqrt(sizes[pixelArrayCounter]));
+  var colors = ["#f4e500","#e32322","#444e99","#ffffff","#000000"]
+
+  function colorPixels(){
+    var x = 0;
+    var y = 0;
+    ctx.clearRect(0, 0, c.width, c.height);
+    for(var i = 0; i < sizes[pixelArrayCounter]; i++){
+      ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+      ctx.fillRect(x,y,pixelSize,pixelSize);
+      if(x == c.width-pixelSize){
+        x = 0;
+        y += pixelSize;
+      }
+      else{
+        x += pixelSize;
+      }
+    }
+  }
+
+  function changePixelSize(param){ //NOW WRITES THE NUMBER OF PIXELS INSTEAD OF THE SIZE
+    if(param == "+" && pixelArrayCounter != sizes.length-1){
+      pixelArrayCounter += 1;
+    }
+    else if(param == "-" && pixelArrayCounter != 0){
+      pixelArrayCounter -= 1;
+    }
+    pixelSize = c.height/(Math.sqrt(sizes[pixelArrayCounter]));
+    document.getElementById("sizeNumber").innerHTML = sizes[pixelArrayCounter];
+  }
+  
+  function draw(code){
+    var x = 0;
+    var y = 0;
+    switch(code){
+      case "mondrian":
+        code = (Math.round(Math.random()) === 0 ? "111111111110222222222220000000111111111110222222222220000000111111111110222222222220000000100000000000000000000000000000110111111111111111111110000000110111111111111111111110000000110111111111111111111110000000110111111111111111111110000000110111111111111111111110000000110111111111111111111110111111110111111111111111111110111111110111111111111111111110111111110111111111111111111110111111110111111111111111111110111111110111111111111111111110111111000111111111111111111110111111440111111111111111111110111111440111111111111111111110111111440111111111111111111110111111440111111111111111111110111111440111111111111111111110111111440111111111111111111110111111440111111111111111111110111111400000000000000000000000111111111111111111111111111110111111111111111111111111111110111111111111111111111111111110111111111111111111111111111110000000111111111111111111111110333333111111111111111111111113333333" : "333333333333301111111111111111333333333333301111111111111111333333333333301111111111111111333333333333301111111111111111333333333333301111111111111111333333333333301111111111111111333333333333301111111111111111333333333333301111111111111111333333333333301111111111111111333333333333301111111111111111000000000000000000000000000000111111111111101111111111111111111111111111101111111111111111111111111111101111111111111111111111111111101111111111111111111111111111101111111111111111111111111111101111111111111111111111111111101111111111111111111111111111101111111111111111111111111111101111111111111111000000000000000000000000000000222201111111104444440111111111222201111111104444440111111111222201111111104444440111111111222201111111104444440111111111222201111111104444440111111111222201111111104444440111111111222201111111100000000111111111222201111111101111110111111111222201111111101111110111111111");
+        break;
+        
+      default:
+        break;
+    }
+
+    ctx.clearRect(0, 0, c.width, c.height);
+    var pixelSize = c.height/(Math.sqrt(code.length));
+    for(var i = 0; i < code.length; i++){
+      switch(code[i]){
+        case '0':
+          ctx.fillStyle = "#000000";
+          break;
+
+        case '1':
+          ctx.fillStyle = "#ffffff";
+          break;
+
+        case '2':
+          ctx.fillStyle = "#f4e500";
+          break;
+
+        case '3':
+          ctx.fillStyle = "#e32322";
+          break;
+
+        case '4':
+          ctx.fillStyle = "#444e99";
+          break;
+      }
+      ctx.fillRect(x,y,pixelSize,pixelSize);
+      if(x == c.width-pixelSize){
+        x = 0;
+        y += pixelSize;
+      }
+      else{
+        x += pixelSize;
+      }
+    }
+  }
+
+  </script>
+</body>
+
+</html>

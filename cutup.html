@@ -1,0 +1,106 @@
+<!doctype HTML>
+<html>
+
+<head>
+	<title>Cut-up</title>
+	<link href="https://fonts.googleapis.com/css?family=Bungee|Open+Sans" rel="stylesheet">
+	<style>
+		body{
+			margin: 0 0 0 0;
+		}
+		textarea {
+			background-color: #f7f7f7;
+			resize: none;
+			margin-bottom: 30px;
+			margin-top: 20vh;
+			border: none;
+			box-shadow: 5px 5px 16px 0px #525252;
+			outline: none;
+
+			font-family: Open Sans,serif;
+			font-size: 16px;
+			padding: 5px;
+			font-weight: bold;
+		}
+		button {
+			font-family: Bungee;
+			padding: 10px;
+			font-size: 14px;
+			border: none;
+			cursor: pointer;
+			background-color: #f7f7f7;
+			transition: all 0.3s ease-in-out;
+			border-radius: 2px;
+		}
+		button:disabled {
+			color: grey;
+			cursor: auto;
+		}
+		#cutup:hover {
+			background-color: #891833;
+			color: white;
+		}
+		#buttons {
+			display: inline-block;
+		}
+		#bg {
+			margin: none;
+			position: absolute;
+			height: 100vh;
+			width: 100vw;
+			background-image: url("newspap.png");
+			z-index: -1;
+			filter: blur(2px);
+		}
+	</style>
+</head>
+
+<body>
+	<div id="bg"></div>
+	<center>
+		<textarea rows="20" cols="50" id="text" autofocus autocapitalize="sentences"></textarea><br>
+		<div id="buttons"><button type="button" onclick="sbmit()" id="cutup">Cut up!</button>&nbsp&nbsp&nbsp&nbsp<button type="button" onclick="restore()" id="original">Original</button></div>
+	</center>
+	<script>
+		var original = "";
+		document.getElementById("original").disabled = true;
+		function sbmit(){
+			var textbox = document.getElementById("text");
+			if(original === "" && textbox.value != ""){
+				original = textbox.value;
+				document.getElementById("original").disabled = false;
+			}
+
+			var words = textbox.value.toLowerCase().split(' ');
+
+			var shuffled = shuffle(words);
+			textbox.value = shuffled.join(" ");
+		}
+
+		function restore(){
+			var textbox = document.getElementById("text");
+			textbox.value = original;
+		}
+
+		function shuffle(array) {
+		  var m = array.length, t, i;
+
+		  // While there remain elements to shuffle…
+		  while (m) {
+
+		    // Pick a remaining element…
+		    i = Math.floor(Math.random() * m--);
+
+		    // And swap it with the current element.
+		    t = array[m];
+		    array[m] = array[i];
+		    array[i] = t;
+		  }
+
+		  return array;
+		}
+
+	</script>
+</body>
+
+</html>

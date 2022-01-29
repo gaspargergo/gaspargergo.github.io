@@ -1,0 +1,332 @@
+<html>
+
+<head>
+  <title>instant Art</title>
+  <link href="https://fonts.googleapis.com/css?family=Lacquer&display=swap" rel="stylesheet">
+
+  <style>
+    html,body{
+      background-color: #b33a3a;
+      overflow: hidden;
+      margin: 0px;
+      height: 100%;
+      width: 100%;
+    }
+
+    #title {
+      font-family: Lacquer, cursive;
+      font-size: 50px;
+      letter-spacing: 3px;
+      margin-top: 1000px;
+      transition: all 0.5s ease-in-out;
+      animation: pulse 2s infinite;
+    }
+
+    span{
+      transition: all 0.5s ease-in-out;
+    }
+
+    a:hover{
+      cursor: pointer;
+    }
+
+    @keyframes pulse {
+      0% {
+        color: white;
+      }
+      50% {
+        color: red;
+        text-shadow: 0px 0px 40px black;
+      }
+      100% {
+        color: white;
+      }
+    }
+
+    center{
+      margin-top: 50px;
+    }
+
+    #paintCanvas{
+      background-color: white;
+      margin-top: 60px;
+      box-shadow: 5px 5px 16px 0px #562f2f;
+      z-index:5;
+    }
+
+    #text{
+      position: static;
+      color: white;
+      font-size: 14px;
+      letter-spacing: 1px;
+      font-family: Shrikhand, cursive;
+      margin-left: 300px;
+      margin-top: -20px;
+      transform: rotate(-20deg);
+      transition: all 0.5s ease-in-out;
+    }
+
+    #text:hover{
+      transform: rotate(-25deg);
+    }
+
+    #sizeMenu{
+      margin-top: 50px;
+      color: white;
+      height: 60px;
+      width: 200px;
+      vertical-align: center;
+      line-height: 60px;
+      font-size: 30px;
+      font-family: Shrikhand, cursive;
+      opacity: 0.1;
+      transition: all 0.5s ease-in-out;
+    }
+
+    #sizeMenu .plusminus{
+      opacity: 0.05;
+      transition: all 0.5s ease-in-out;
+    }
+
+    #sizeMenu:hover{
+      opacity: 0.8;
+    }
+
+    #sizeMenu:hover a{
+      opacity: 0.8;
+    }
+
+    #bg {
+      margin: none;
+      position: absolute;
+      height: 100vh;
+      width: 100vw;
+
+      opacity: 0.03;
+      background: url("fire.gif") no-repeat center center fixed;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+    }
+
+    #secondCanvasCont {
+      margin: none;
+      position: absolute;
+      height: 100vh;
+      width: 100vw;
+      z-index: 0;
+    }
+
+    #container{
+      width: 75%;
+      position: fixed;
+      left: 50%;
+      margin-left: -37.5%;
+      text-align: center;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div id="bg"></div>
+  <div id="secondCanvasCont"><canvas id="bgCanvas"></canvas></div>
+  <div id="container"><center><a id="title" onClick="destroy()">Hommage to Hommage to NY</a><br>
+
+
+  <canvas id="paintCanvas" height="600px" width="500px"></canvas>
+
+</center>
+
+  <script>
+
+  function destroy(){
+     var page = document.getElementsByTagName("html")[0];
+     page.parentNode.removeChild(page);
+     clearInterval(intervar);
+     context.close();
+  }
+
+  document.addEventListener('mousedown', function (event) {
+    if (event.detail > 1) {
+      event.preventDefault();
+      }
+    }, false);
+
+  /*
+  SOME SOUND
+  */
+
+  var context=new AudioContext();
+  var o=null;
+  var g=null;
+  var freqRange = Math.floor(Math.random() * 2400) + 600;
+
+  var intervar = setInterval(beep,Math.floor(Math.random() * 300)+100);
+
+
+  function beep(){
+    var frequency = (Math.floor(Math.random() * freqRange));
+    var length = Math.random()+Math.floor(Math.random()*2);
+    var type = "";
+    switch(Math.floor(Math.random() * 4)){
+      case 0:
+        type = "sine";
+        break;
+      case 1:
+        type = "square";
+        break;
+      case 2:
+        type = "triangle";
+        break;
+      case 3:
+        type = "sawtooth";
+        break;
+    }
+    o=context.createOscillator();
+    g=context.createGain();
+    g.gain.value = 0.2;
+    o.type=type;
+    o.connect(g);
+    o.frequency.setValueAtTime(frequency, context.currentTime);
+    g.connect(context.destination);
+    o.start(0);
+    g.gain.exponentialRampToValueAtTime(0.00001,context.currentTime + length);
+    }
+
+  /*
+  SOME PAINTING
+  */
+
+  var paintingCanvas=document.getElementById("paintCanvas");
+  var ctx=paintingCanvas.getContext("2d");
+
+  var secondCanvas = document.getElementById("bgCanvas");
+  var ctx2 = secondCanvas.getContext("2d");
+  ctx2.canvas.width  = window.innerWidth;
+  ctx2.canvas.height = window.innerHeight;
+
+  function paintedSurface(x,y,size,dy){
+    this.x = x;
+    this.y = y;
+    this.size = size;
+    this.dy = dy;
+
+      this.draw = function(){
+        ctx.fillStyle = "grey";
+        ctx.fillRect(this.x,this.y,this.size,this.size);
+      }
+
+      this.update = function(){
+        this.y -= this.dy;
+        this.draw();
+      }
+  }
+
+
+  function wheel(x,y,radius, lines, speed){
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.lines = lines;
+    this.speed = speed;
+    this.deg = 0;
+
+      this.draw = function(){
+        ctx2.beginPath();
+        ctx2.lineWidth = 8;
+        ctx2.arc(this.x,this.y, this.radius, 0, Math.PI * 2, true);
+        ctx2.stroke();
+
+        for(var i = 0; i < lines; i++){
+          var degreeInRad = (360/lines*i) * Math.PI / 180 + this.deg;
+          ctx2.moveTo(this.x,this.y)
+          ctx2.lineTo(this.x + this.radius * Math.cos(degreeInRad), this.y + this.radius * Math.sin(degreeInRad));
+          ctx2.stroke();
+        }
+  
+        ctx2.beginPath();
+        ctx2.arc(this.x,this.y, this.radius/6, 0, Math.PI * 2, true);
+        ctx2.fill();
+      }
+
+      this.update = function(){
+        this.draw();
+        this.deg += this.speed;
+      }
+  }
+
+  var wheels = [];
+  var numOfWheels = Math.floor(Math.random() * 10)+10;
+
+  for(var i = 0; i < numOfWheels; i++){
+    var xTemp = Math.floor(Math.random() * secondCanvas.width);
+    var yTemp = Math.floor(Math.random() * secondCanvas.height);
+    var radiusTemp = Math.floor(Math.random() * 50) + 50;
+    var linesTemp = Math.floor(Math.random() * 5) + 5;
+    var speedTemp = Math.floor(Math.random() * 10) + 1;
+
+    wheels.push(new wheel(xTemp,yTemp,radiusTemp,linesTemp,speedTemp));
+  }
+
+
+  var paintedArray = [];
+  var dx = 20;
+  var dy = 10;
+  var x = 100;
+  var y = 200;
+
+  function painting(){
+    requestAnimationFrame(painting);
+    ctx.clearRect(0,0,paintingCanvas.width,paintingCanvas.height); //CLEARING BOTH CANVASES
+    ctx2.clearRect(0,0,secondCanvas.width,secondCanvas.height);
+
+    paintedArray.push(new paintedSurface(x,y,100,dy));
+
+    for(var i = 0; i < paintedArray.length;i++){
+      paintedArray[i].update();
+      if(paintedArray[i].y <= -100){ // just so the number of painted surfaces doesn't get huge
+        paintedArray.splice(i,1);
+      }
+    }
+
+    for(var i = 0; i < wheels.length;i++){
+      wheels[i].update();
+
+      ctx2.beginPath(); //connecting wheels
+      ctx2.moveTo(wheels[i].x,wheels[i].y);
+      if(i === wheels.length-1){
+        ctx2.lineTo(wheels[1].x,wheels[1].y);
+      }
+      else{
+        ctx2.lineTo(wheels[i+1].x,wheels[i+1].y);
+      }
+      ctx2.stroke();
+    }
+
+    ctx.save();
+
+    ctx.fillStyle = "black";
+    ctx.shadowColor = '#999';
+    ctx.shadowBlur = 20;
+    ctx.shadowOffsetX = 10;
+    ctx.shadowOffsetY = 10;
+    ctx.fillRect(0,245,x,10); // the arm
+    ctx.fillRect(x,y,100,100);
+
+    ctx.restore();
+
+    x += dx;
+
+    if(x > paintingCanvas.width-200 || x < 100){
+      dx = -dx;
+    }
+
+  }
+  painting(); 
+
+  </script>
+</body>
+
+</html>

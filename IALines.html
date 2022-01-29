@@ -1,0 +1,180 @@
+<!doctype HTML>
+<html>
+
+<head>
+  <title>instant Art</title>
+  <link href="https://fonts.googleapis.com/css?family=Shrikhand" rel="stylesheet">
+
+  <style>
+    #title {
+      font-family: Shrikhand, cursive;
+      font-size: 50px;
+      color: black;
+      letter-spacing: 3px;
+      margin-top: 1000px;
+      transition: all 0.5s ease-in-out;
+      -webkit-text-stroke: 1px black;
+    }
+
+    span{
+      transition: all 0.5s ease-in-out;
+    }
+
+    a:hover{
+      cursor: pointer;
+    }
+
+    #title:hover{
+      color: white;
+  /*text-shadow:
+   -1px -1px 0 #000,  
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+     1px 1px 0 #000;*/
+    }
+
+
+    center{
+      margin-top: 50px;
+    }
+
+    canvas{
+      margin-top: 60px;
+      box-shadow: 5px 5px 16px 0px rgba(171,171,171,0.82);
+    }
+
+    #text{
+      position: static;
+      font-size: 14px;
+      letter-spacing: 1px;
+      font-family: Shrikhand, cursive;
+      color: red;
+      margin-left: 300px;
+      margin-top: -20px;
+      transform: rotate(-20deg);
+      transition: all 0.5s ease-in-out;
+    }
+
+    #text:hover{
+      color: black;
+      transform: rotate(-25deg);
+    }
+
+  </style>
+</head>
+
+<body>
+  <center><a id="title" onClick="colorPixels()">instant ART</a>
+    <a onClick="drawEasterEgg()"><p id="text">Lines!</p></a>
+
+  <div id="container"><canvas id="canvas" height="600px" width="600px"></canvas></div>
+
+</center>
+
+
+
+  <script>
+
+  document.addEventListener('mousedown', function (event) {
+    if (event.detail > 1) {
+      event.preventDefault();
+      }
+    }, false);
+
+  var c=document.getElementById("canvas");
+  var ctx=c.getContext("2d");
+  ctx.clearRect(0, 0, c.width, c.height);
+
+  function colorPixels(){
+    ctx.strokeStyle = '#000000';
+    var x = Math.floor(Math.random() * c.width) + 1;
+    var y = Math.floor(Math.random() * c.height) + 1;
+    var numberOfLines = Math.floor(Math.random() * 50) + 1;
+    var oneLine = (Math.round(Math.random()) === 0 ? true : false); // determines wether there will be only one continuous line or several
+    var colored = (Math.floor(Math.random() * 10) > 3 ? true : false); // determines wether there will be color 
+    ctx.clearRect(0, 0, c.width, c.height);
+    ctx.lineWidth = Math.floor(Math.random() * 7) + 3;
+    ctx.beginPath();
+    ctx.moveTo(x,y);
+
+    for(var i = 0; i < numberOfLines; i++){
+      if(!oneLine){
+        ctx.beginPath();
+        x = Math.floor(Math.random() * c.width) + 1;
+        y = Math.floor(Math.random() * c.height) + 1;
+        ctx.moveTo(x, y);
+        if(colored){
+          ctx.strokeStyle = '#'+ Math.random().toString(16).slice(-6);
+        }
+      }
+      x = Math.floor(Math.random() * c.width) + 1;
+      y = Math.floor(Math.random() * c.height) + 1;
+      ctx.lineTo(x, y);
+      if(!oneLine){
+        ctx.closePath();
+      }
+      ctx.stroke();
+    }
+  }
+  
+  function drawEasterEgg(){
+    var x = 0;
+    var y = 0;
+    var code ="0011144458877700001114445887770000222336588777000022233658877700005887773362880000588777336288000058877744428800005887774442880000444288777577000044428877757700003362887775770000336288777577000077758811133600007775881113360000777588422444000077758842244400";
+
+    ctx.clearRect(0, 0, c.width, c.height);
+    var pixelSize = Math.round(c.height/(Math.sqrt(code.length)));
+    for(var i = 0; i < code.length; i++){
+      switch(code[i]){
+        case '0':
+          ctx.fillStyle = "#ffffff"; //white
+          break;
+
+        case '1':
+          ctx.fillStyle = "#aa814d"; //brownish-yellow
+          break;
+
+        case '2':
+          ctx.fillStyle = "#bd7a46"; //orange
+          break;
+
+        case '3':
+          ctx.fillStyle = "#bb9d69"; //yellow
+          break;
+
+        case '4':
+          ctx.fillStyle = "#b25858"; //light red
+          break;
+
+        case '5':
+          ctx.fillStyle = "#b02218"; //red
+          break;
+
+        case '6':
+          ctx.fillStyle = "#454c5f"; //denim/blue
+          break;
+
+        case '7':
+          ctx.fillStyle = "#131313"; //dark
+          break;
+
+        case '8':
+          ctx.fillStyle = "#f3efc9"; //cream
+          break;
+      }
+      ctx.fillRect(x,y,pixelSize,pixelSize);
+      if(x >= c.width-pixelSize){
+        x = 0;
+        y += pixelSize;
+      }
+      else{
+        x += pixelSize;
+      }
+    }
+  }
+
+
+  </script>
+</body>
+
+</html>

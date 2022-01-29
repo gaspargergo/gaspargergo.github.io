@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>instant Art</title>
+  <link href="https://fonts.googleapis.com/css?family=Fredoka+One&display=swap" rel="stylesheet">
+
+  <style>
+    body{
+      background-color: #f7c395;
+    }
+    #button{
+      background-color: #aac178;
+      padding: 10px;
+      font-size: 1.7em;
+      margin-top: 30px;
+      font-family: Fredoka One;
+    }
+    #text{
+      width: 40%;
+      height: 600px;
+    }
+    center{
+      margin-top: 30px;
+    }
+
+  </style>
+</head>
+
+<body>
+  <center>
+    <textarea rows="20"  id="text" autofocus></textarea><br>
+    <button type="button" onclick="sbmit()" id="button"><p id="buttonText">SOUND</p></button>
+  </center>
+
+</center>
+
+  <script>
+
+  var letters = [",", ".", "!", "?","a", "á", "b", "c", "cs", "d", "dz", "dzs", "e", "é", "f", "g", "gy", "h", "i", "í","j", "k", "l", "ly","m", "n", "ny", "o", "ó", "ö", "ő", "p", "r", "s", "sz", "t", "ty", "u", "ú", "ü", "ű", "v", "w","x", "y", "z", "zs"];
+  var interval;
+  var i = 0;
+
+  function sbmit(){
+      var textbox = document.getElementById("text");
+      var text = textbox.value;
+      i = 0;
+
+      interval = setInterval(makeSound, 200, text, text.length);
+    }
+
+  function makeSound(text, length){
+    if(i >= length){
+      clearInterval(interval);
+    }
+    else {
+      i++;
+      beep((letters.indexOf(text[i])+1)*100);
+    }
+  }
+
+
+  var context=new AudioContext();
+    var o=null;
+    var g=null;
+
+  function beep(freq){
+    var frequency = freq;
+    var length = 1;
+
+    o=context.createOscillator();
+    g=context.createGain();
+    g.gain.value = 0.2;
+    o.type="triangle";
+    o.connect(g);
+    o.frequency.setValueAtTime(frequency, context.currentTime);
+    g.connect(context.destination);
+    o.start(0);
+    g.gain.exponentialRampToValueAtTime(0.00001,context.currentTime + length);
+    }
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Diagonal</title>
+    <style>
+      
+      body{
+        overflow: hidden;
+        margin: 0 0 0 0;
+      }
+
+      .line {
+        background-color: crimson;
+        height: 100px;
+        margin-left: -1925px;
+        margin-bottom: 100px;
+        
+        -webkit-transform: skewY(-45deg);
+        -moz-transform: skewY(-45deg);
+        -ms-transform: skewY(-45deg);
+        -o-transform: skewY(-45deg);
+        transform: skewY(-45deg);
+
+        transition: all 0.5s ease-in-out;
+      }
+
+    </style>
+  </head>
+  <body>
+
+    <script type="text/javascript">
+
+      /*
+         _____     _____     _____
+        | ____|   / ___ \   |  __ \
+        | |___   | /   \ |  | |__| |
+        | ____|  | |   | |  |    _/
+        | |      | \___/ |  | |\ \
+        |_|       \_____/   |_| \_\
+
+         _____        _        __    _        _____    _            _    _       _    _    __    _
+        |  __ \      / \      |  \  | |      | ____|  | |          / \  \ \     / /  | |  |  \  | |
+        | |  \ |    / _ \     |   \ | |      | |___   | |         / _ \  \ \   / /   | |  |   \ | |
+        | |  | |   / /_\ \    | |\ \| |      | ____|  | |        / /_\ \  \ \_/ /    | |  | |\ \| | 
+        | |__/ |  / _____ \   | | \ \ |      | |      | |___    / _____ \  \   /     | |  | | \ \ |
+        |_____/  /_/     \_\  |_|  \__|      |_|      |_____|  /_/     \_\  \_/      |_|  |_|  \__|
+
+      */
+      console.log("FOR DAN FLAVIN");
+
+      var body = document.body;
+      var lines = Math.round(window.innerWidth/50);
+
+      for(var i = 0; i < lines; i++){
+        body.innerHTML += '<div class="line"></div>';
+      }
+
+      setInterval(colorChange,2000);
+
+      function colorChange(){
+        var linesArr = document.getElementsByClassName('line');
+        var color = '#'+ Math.random().toString(16).slice(-6);
+
+        for(var i = 0; i < linesArr.length;i++){
+          linesArr[i].style.backgroundColor = color;
+        }
+      }
+
+    </script>
+  </body>
+</html>

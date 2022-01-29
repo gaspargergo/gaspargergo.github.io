@@ -1,0 +1,91 @@
+<html>
+<head>
+	
+	<style type="text/css">
+		body{
+		}
+
+		#bg{
+			height: 1110px;
+			width: 70%;
+			margin: 25px auto; /* Will not center vertically and won't work in IE6/7. */
+			left: 0;
+			right: 0;
+			position: absolute;
+
+			z-index: -1;
+			background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAcUlEQVQoU2P8n/zgP3NUFAMhwMi01+r/P+djeNUx7bVigCv8j6SU8R0ST4iRAbvCuxAdjIJQxVgVQhXBDAcrRlfI8O4/w//3jKhuVWZgAImgWA1SCAJwxcpQJ+BSCFYshDAZ00Q8AQS3mlBg/122jAEABJNEBHGxT04AAAAASUVORK5CYII=
+    		) repeat;	
+
+    		border: solid black 20px;
+		}
+
+		#content{
+			margin: 100px auto; /* Will not center vertically and won't work in IE6/7. */
+			left: 0;
+			right: 0;
+			height: 1000px;
+			width: 60%;
+			background-color: white;
+			position: absolute;
+		}
+
+		#button {
+			background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAcUlEQVQoU2P8n/zgP3NUFAMhwMi01+r/P+djeNUx7bVigCv8j6SU8R0ST4iRAbvCuxAdjIJQxVgVQhXBDAcrRlfI8O4/w//3jKhuVWZgAImgWA1SCAJwxcpQJ+BSCFYshDAZ00Q8AQS3mlBg/122jAEABJNEBHGxT04AAAAASUVORK5CYII=
+    		) repeat;	
+    		color: yellow;
+    		font-size: 30px;
+    		font-weight: bold;
+
+    		height: 100px;
+    		width: 300px;
+    		border: solid black 2px;
+
+    		transition: all 0.1s ease-in-out;
+
+    		position: absolute;
+    		left: 50%;
+    		margin-left: -150px;
+    		margin-top: 30px;
+		}
+
+		#button:hover {
+      		text-decoration: underline;
+      		cursor: pointer;
+      		border: ridge red 4px;
+		}
+
+		#buttonText {
+			background-color: black;
+		}
+
+		#text{
+			border: solid red 4px;
+			width: 100%;
+		}
+	</style>
+</head>
+<body>
+	<div id="bg"></div>
+	<div id="content">
+		<textarea rows="50"  id="text" autofocus></textarea><br>
+		<button type="button" onclick="sbmit()" id="button"><p id="buttonText">Liquify!</p></button>
+	</div>
+	<script type="text/javascript">
+		
+		function sbmit(){
+			var textbox = document.getElementById("text");
+			var text = textbox.value.split(' ');
+
+			for(var i = 0; i < text.length; i++){
+				if(Math.round(Math.random()) == 1){
+					text.splice(i,1);
+				}
+			}
+
+			textbox.value = text.join(' ');
+		}
+	</script>
+</body>
+
+</html>

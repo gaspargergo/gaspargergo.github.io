@@ -1,0 +1,335 @@
+<!doctype HTML>
+<html>
+
+<head>
+  <title>AutoPattern</title>
+  <link href="https://fonts.googleapis.com/css?family=Alfa+Slab+One&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+
+    #title {
+      font-family: 'Alfa Slab One', sans-serif;
+      font-size: 50px;
+      color: white;
+      letter-spacing: -2px;
+      background-color: black;
+    }
+
+    #container {
+      position: fixed;
+      margin-top: 50px;
+      text-align: center;
+      width: 100%;
+    }
+
+    a:hover{
+      cursor: pointer;
+    }
+
+
+  </style>
+</head>
+
+<body>
+  <div id="container"><a id="title" onClick="draw()">instant patterns</a></div>
+
+  <canvas id="myCanvas"></canvas>
+
+
+  <script>
+    var c = document.getElementById("myCanvas");
+    var ctx = c.getContext("2d");
+    c.width = window.innerWidth;
+    c.height = window.innerHeight;
+
+    document.addEventListener('mousedown', function (event) {
+    if (event.detail > 1) {
+      event.preventDefault();
+      }
+    }, false);
+
+    /*
+    THE LINE TYPES:
+    0: _
+
+    1: /
+
+    2: \
+
+    3: ‾
+
+    4: |
+
+    */
+
+    /*
+      **********************
+      **********************
+      MAKING THE BASE SAMPLE
+      **********************
+      **********************
+    */
+
+
+
+    function generateSample(sampleLength){ //Generates the first, 4 blocks(160px) long sample as an array of numbers
+
+      var sample = [];
+
+      for(var i = 0; i < sampleLength; i++){
+        var temp = getRandomInt(0,3);
+
+        sample.push(temp);
+      }
+
+      sample = checkForErrors(sample);
+
+      return sample;
+    }
+
+
+    function checkForErrors(arr){ //Checking and inserting 4-lines wherever needed(where lines wouldn't intersect)
+      
+      var temp = arr;
+
+      for(var i = 0; i < temp.length; i++){
+        
+        if(i != 0){
+              if(!checkIfMatch(temp[i],temp[i-1])){
+                temp.splice(i, 0, 4);
+                i++;
+              }
+            }
+
+      }
+
+      //Also check if last one fits with the first
+
+      if(!checkIfMatch(temp[0],temp[temp.length-1])){
+        temp.push(4);
+      }
+
+      return temp;
+
+    }
+
+
+    function checkIfMatch(curr, before){
+
+      switch(curr){
+
+          case 0:
+              if(before == 1 || before == 3){
+                return false;
+              }
+            break;
+
+          case 1:
+              if(before  == 3 || before == 1){
+                return false;
+              }
+            break;
+
+          case 2:
+              if(before == 0 || before == 2){
+                return false;
+              }
+            break;
+
+          case 3:
+              if(before == 0 || before == 2){
+                return false;
+              }
+            break;
+        }
+
+      return true;
+
+    }
+
+
+    function makePatternLine(pattern, sampleLength){
+
+      var sample = [];
+
+      for(var i = 0; i < c.width/(sampleLength*20); i++){
+        sample = sample.concat(pattern);
+      }
+
+      return sample;
+
+    }
+
+
+
+    /*
+      **********************
+      **********************
+      DRAWING
+      **********************
+      **********************
+    */
+
+    /*
+    THE MODES:
+    0: draws each line normally
+
+    1: shift to the right
+
+    2: shift to the left
+
+    3: shifts, then shifts back
+    */
+
+    function draw(){ //Decides the random elements, then calls drawPattern with the random elements as parameters
+
+      var sampleLength = getRandomInt(3,12);
+      var temp = generateSample(sampleLength);
+      var mode = getRandomInt(0,3);
+
+      drawPattern(temp, sampleLength, mode);
+    }
+
+
+    function drawPattern(pattern, sampleLength, mode){ //makes a line of pattern with a function call, then draws that nine times, the way of drawing is dependant on the mode
+
+      ctx.clearRect(0, 0, c.width, c.height); //Clear canvas
+
+      var patternLine = makePatternLine(pattern, sampleLength);
+      var start = 0;
+      for(var i = 0; i < c.height/20; i++){
+
+        if(mode == 1 && i > 0){
+          var popped = 4;
+
+          while(popped == 4){
+            popped = patternLine.pop();
+            patternLine.unshift(popped);
+          }
+        }
+        else if(mode == 2 && i > 0){
+          var shifted = 4;
+
+          while(shifted == 4){
+            shifted = patternLine.shift();
+            patternLine.push(shifted);
+          }
+        }
+        else if(mode == 3 && i > 0){
+          if(i % 2 == 0){
+            var shifted = 4;
+
+            while(shifted == 4){
+              shifted = patternLine.shift();
+              patternLine.push(shifted);
+            }
+          }
+          else{
+            var popped = 4;
+
+            while(popped == 4){
+              popped = patternLine.pop();
+             patternLine.unshift(popped);
+            }
+          }
+        }
+
+      drawLine(patternLine,start);
+      start += 20;
+      }
+    }
+
+
+    function drawLine(sample,y){
+      
+      var ogy = y;
+      var y = y;
+      var x = 0;
+
+      for(var i = 0; i < sample.length;i++){
+
+        switch(sample[i]){
+          case 0:
+          case 1:
+            if(y == ogy){
+              y += 20;
+            }
+            break;
+          case 2:
+          case 3:
+            if( y == ogy + 20){
+              y = ogy;
+            }
+            break;
+        }
+
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+
+        switch(sample[i]){
+
+          case 0:
+          case 3:
+            x += 20;
+            break;
+
+          case 1:
+            y -= 20;
+            x += 20;
+            break;
+
+          case 2:
+            y += 20;
+            x += 20;
+            break;
+
+          case 4:
+            if(i != 0){
+              switch(sample[i-1]){
+                case 0:
+                case 2:
+                  y -= 20;
+                  break;
+                case 1:
+                case 3:
+                  y += 20;
+              }
+            }
+            else{
+              y += 20;
+            }
+            break;
+        }
+
+        ctx.lineTo(x, y);
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+
+    }
+
+
+
+    /*
+      **********************
+      **********************
+      OTHER
+      **********************
+      **********************
+    */
+
+
+    
+    function getRandomInt(min, max) {
+
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,147 @@
+<!doctype HTML>
+<html>
+<head>
+	
+	<style type="text/css">
+		canvas{
+
+		}
+
+		#myImg{
+			visibility: hidden;
+			position: fixed;
+		}
+
+		#average{
+			margin-left: 20px;
+			padding: 10px;
+		}
+
+	</style>
+</head>
+<body>
+	<img id="myImg" src="#" height="500px" alt="your image">
+	<input id="imageUpload" type='file'/>
+
+	<label for="steps">Number of steps:</label>
+
+	<select id="steps">
+	  <option value="10">10</option>
+	  <option value="50">50</option>
+	  <option value="100" selected>100</option>
+	  <option value="500">500</option>
+	  <option value="1000">1000</option>
+	  <option value="5000">5000</option>
+	  <option value="10000">10000</option>
+	</select>
+
+	<label for="opacity">opacity:</label>
+
+	<select id="opacity">
+	  <option value="0.5">0.5</option>
+	  <option value="0.1">0.1</option>
+	  <option value="0.05">0.05</option>
+	  <option value="0.01">0.01</option>
+	  <option value="0.002" selected>0.002</option>
+	</select>
+
+	<label for="stamping">stamping(for more color)</label>
+
+	<select id="stamping">
+	  <option value="0">0</option>
+	  <option value="1">1</option>
+	  <option value="2">2</option>
+	  <option value="3">3</option>
+	  <option value="4">4</option>
+	  <option value="5" selected>5</option>
+	  <option value="6">6</option>
+	  <option value="7">7</option>
+	  <option value="8">8</option>
+	  <option value="9">9</option>
+	  <option value="10">10</option>
+
+	</select>
+
+	<button onclick="average()" id="average"><strong>Average</strong></button><br>
+	<canvas id="canvas"></canvas>
+
+	<script type="text/javascript">
+		var upload=document.getElementById("imageUpload");
+
+		upload.onchange= function(){//uploading the image and putting it on a canvas
+	        var img = document.getElementById("myImg");  // $('img')[0]
+	        img.src = URL.createObjectURL(this.files[0]); // set src to file url
+
+	        img.onload = imageIsLoaded;
+		}
+
+
+		function imageIsLoaded(e) { //drawing the image onto the canvas
+			var c = document.getElementById("canvas");
+			var ctx = c.getContext("2d");
+			var img = document.getElementById("myImg");
+			//clearing just in case
+			ctx.clearRect(0,0,canvas.width,canvas.height);
+			//sizing canvas to be a bit bigger than the picture (height and width will be equal to the picture's diameter)
+			var imgDiameter = Math.sqrt(Math.pow(img.clientHeight, 2) + Math.pow(img.clientWidth, 2))
+
+	        c.height = imgDiameter;
+			c.width = imgDiameter;
+
+			var centerX = (imgDiameter - img.width)/2; //calculating amount to center, canvaswidth-imagewidth/2
+			var centerY = (imgDiameter - img.height)/2; //calculating amount to center, canvasheight-imageheight/2
+			//drawing image
+			ctx.drawImage(img,centerX,centerY,img.width,img.height);
+
+		 }
+
+		function rotateAndDraw(degree){
+			var c = document.getElementById("canvas");
+			var ctx = c.getContext("2d");
+			var img = document.getElementById("myImg");
+
+		    //getting ready to rotate
+		    ctx.save();
+		    // move to the center of the canvas
+		    ctx.translate(c.width/2,c.height/2);
+		    // rotate the canvas to the specified degrees
+		    ctx.rotate(degree*Math.PI/180);
+		    ctx.drawImage(img,-img.width/2,-img.height/2, img.width,img.height);
+		   
+		    ctx.restore();
+
+		}
+
+		function average(){
+			var c = document.getElementById("canvas");
+			var ctx = c.getContext("2d");
+			ctx.clearRect(0,0,canvas.width,canvas.height);
+
+			//calculating the angle of rotation of each step based on the number of steps
+			var selectSteps = document.getElementById("steps");
+			var steps = selectSteps.options[selectSteps.selectedIndex].value;
+			var angle = 360 / steps;
+
+			//getting the opacity (using the same variable)
+			var selectOpacity = document.getElementById("opacity");
+			ctx.globalAlpha = selectOpacity.options[selectOpacity.selectedIndex].value;
+
+			for(var i = 0; i < steps; i++){
+				rotateAndDraw(angle*(i+1));
+			}
+
+			//stamping reprinting the same image on the canvas
+			var selectStamping = document.getElementById("stamping");
+			var stamping = selectStamping.options[selectStamping.selectedIndex].value;
+
+			if(stamping != 0){
+				ctx.globalAlpha = 1;
+
+				for(var i = 0; i < stamping ;i++){
+					ctx.drawImage(c, 0, 0);
+				}
+			}
+		}
+	</script>
+</body>
+</html>

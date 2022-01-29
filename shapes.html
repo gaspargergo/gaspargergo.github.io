@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+	<title>Shapes</title>
+	<style>
+		body{
+			margin:none;
+			transition: all 0.2s ease-in-out;
+		}
+
+		#center {
+			position: absolute;
+			top:50%;
+			left: 50%;
+			margin-left: -167px;
+			margin-top: -250px;
+		}
+
+		a {
+		cursor: pointer;
+		display: block;
+		height:95vh;
+		}
+
+	</style>
+
+</head>
+<body>
+<a onClick="draw()">
+<img id="t1" height="167px" width="167px" src="" hidden>
+<img id="t2" height="167px" width="167px" src="" hidden><br>
+<img id="b1" height="333px" width="167px" src="" hidden>
+<img id="b2" height="333px" width="167px" src="" hidden>
+<div id="center">
+	<canvas width="335px" height="500px" id="canvas"></canvas>
+</div>
+</a>
+
+	<script>
+		var t1 = document.getElementById("t1");
+		var t2 = document.getElementById("t2");
+		var b1 = document.getElementById("b1");
+		var b2 = document.getElementById("b2");
+		t1.src = "t (" + (Math.floor(Math.random() * 144) + 1)+ ").png";
+		t2.src = "t2 (" + (Math.floor(Math.random() * 144) + 1)+ ").png";
+		b1.src = "b (" + (Math.floor(Math.random() * 144) + 1)+ ").png";
+		b2.src = "b2 (" + (Math.floor(Math.random() * 144) + 1)+ ").png";
+
+		var canvas = document.getElementById("canvas");
+		var ctx = canvas.getContext("2d");
+
+		function draw(){
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			var randomColor = '#'+ Math.random().toString(16).slice(-6);
+			document.body.style.backgroundColor = randomColor;
+
+			ctx.drawImage(t1, 0, 0 , 167, 167);
+			ctx.drawImage(t2, 162, 0, 167, 167);
+			ctx.drawImage(b1, 0, 162, 167, 333);
+			ctx.drawImage(b2, 162, 162, 167, 333);
+
+			//give new sources
+			t1.src = "t (" + (Math.floor(Math.random() * 144) + 1)+ ").png";
+			t2.src = "t2 (" + (Math.floor(Math.random() * 144) + 1)+ ").png";
+			b1.src = "b (" + (Math.floor(Math.random() * 144) + 1)+ ").png";
+			b2.src = "b2 (" + (Math.floor(Math.random() * 144) + 1)+ ").png";
+		}
+		
+	</script>
+</body>
+</html>

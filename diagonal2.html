@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		:root {
+		  --light-color: rgba(239, 219, 38, 0.7);
+		}
+
+		body{
+		  background-color: black;
+		}
+
+		#light{
+		  position: absolute;
+		  left: 50%;
+		  top: 50%;
+		  margin-top: -400px;
+		  height: 800px;
+		  width: 15px;
+		  border-radius: 50px;
+		  background-color: white;
+		  transform: rotate(45deg);
+		  box-shadow:
+		    0 0 20px 5px var(--light-color),
+		    0 0 60px 15px var(--light-color),
+		    0 0 200px 20px var(--light-color);
+
+		   transition: all 0.5s ease-in-out;
+		  }
+		}
+	</style>
+</head>
+<body>
+	<div id="light"></div>
+	<script type="text/javascript">
+		var root = document.querySelector(":root");
+
+		setInterval(changeColor,2000);
+
+		function changeColor(){
+			root.style.setProperty('--light-color', '#'+ Math.random().toString(16).slice(-6));
+		}
+	</script>
+</body>
+</html>>

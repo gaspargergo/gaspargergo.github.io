@@ -1,0 +1,124 @@
+<!doctype HTML>
+<html>
+<head>
+	
+	<style type="text/css">
+		canvas{
+
+		}
+
+		#myImg{
+			visibility: hidden;
+			position: fixed;
+		}
+
+	</style>
+</head>
+<body>
+	<img id="myImg" src="#" height="600px" alt="your image">
+	<input id="imageUpload" type='file'/>
+	<button onclick="average()" id="submit" disabled>pixelize</button>
+	<button onclick="revert()" id="revert" disabled>revert</button>
+	<span>square size:</span>
+				<select id="BS" onchange="changeBrushSize()">
+				<option value="10">10</option>
+				<option value="20">20</option>
+				<option value="30">30</option>
+				<option value="40">40</option>
+				<option value="50" selected="selected">50</option>
+				<option value="100" >100</option>
+			</select><br>
+	<canvas id="canvas"></canvas>
+
+
+	<script type="text/javascript">
+		var pixels
+		var upload=document.getElementById("imageUpload");
+		var c;
+		var ctx;
+		var BRUSH_SIZE = 50;
+
+		upload.onchange= function(){//uploading the image and putting it on a canvas
+	        var img = document.getElementById("myImg");  // $('img')[0]
+	        img.src = URL.createObjectURL(this.files[0]); // set src to file url
+	        img.onload = imageIsLoaded;
+		}
+
+		function imageIsLoaded(e) { //drawing the image onto the canvas
+			c = document.getElementById("canvas");
+			ctx = c.getContext("2d");
+
+			var img = document.getElementById("myImg");
+
+			c.height = img.clientHeight;
+			c.width = img.clientWidth;
+			ctx.drawImage(img,0,0,c.width,c.height);
+			document.getElementById("submit").disabled = false;
+		 }
+	
+		function revert(){ //reverts to original image
+			ctx.drawImage(document.getElementById("myImg"),0,0,c.width,c.height);
+			document.getElementById("revert").disabled = true;	
+		}
+
+		function average(){ //the main function
+			var x = 0;
+			var y = 0;
+			for(var k = 0; k < Math.round(c.height/BRUSH_SIZE);k++){
+				for(var i = 0; i < Math.round(c.width/BRUSH_SIZE);i++){
+					var color = sampleColor(x,y);
+					ctx.fillStyle = "rgb(" + color[0] + "," + color[1] + "," + color[2] + ")";
+					ctx.fillRect(x,y,BRUSH_SIZE,BRUSH_SIZE);
+					x+= BRUSH_SIZE;
+				}
+				y+=BRUSH_SIZE;
+				x=0;
+			}
+			document.getElementById("revert").disabled = false;
+		}
+
+	function sampleColor(X, Y) { //gets the average color of the brushsize area, returns rgb in an array
+	 
+	  let R = 0;
+	  let G = 0;
+	  let B = 0;
+
+	  const data = ctx.getImageData(X, Y, BRUSH_SIZE, BRUSH_SIZE).data;
+	  
+	  const components = data.length;
+	  
+	  for (let i = 0; i < components; i += 4) {
+	    // A single pixel (R, G, B, A) will take 4 positions in the array:
+	    const r = data[i];
+	    const g = data[i + 1];
+	    const b = data[i + 2];
+	    const a = data[i + 3];
+	    
+	    // Update components for solid color and alpha averages:
+	    R += r;
+	    G += g;
+	    B += b;
+
+	  }
+	  const pixelsPerChannel = components / 4;
+	 // The | operator is used here to perform an integer division:
+	  R = R / pixelsPerChannel | 0;
+	  G = G / pixelsPerChannel | 0;
+	  B = B / pixelsPerChannel | 0;
+
+	var rgb = [];
+	rgb.push(R);
+	rgb.push(G);
+	rgb.push(B);
+	return rgb;
+	}
+
+	function changeBrushSize(){
+		BRUSH_SIZE = parseInt(document.getElementById("BS").value);
+	}
+
+
+
+	</script>
+</body>
+</html>

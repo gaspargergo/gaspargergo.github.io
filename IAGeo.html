@@ -1,0 +1,273 @@
+<!doctype HTML>
+<html>
+
+<head>
+  <title>instant Art</title>
+  <link href="https://fonts.googleapis.com/css?family=Shrikhand" rel="stylesheet">
+
+  <style>
+    #title {
+      font-family: Shrikhand, cursive;
+      font-size: 50px;
+      color: black;
+      letter-spacing: 3px;
+      margin-top: 1000px;
+      transition: all 0.5s ease-in-out;
+      -webkit-text-stroke: 1px black;
+    }
+
+    span{
+      transition: all 0.5s ease-in-out;
+    }
+
+    a:hover{
+      cursor: pointer;
+    }
+
+    #title:hover{
+      color: #fdc60b;
+      -webkit-text-stroke: 1px #444e99;
+    }
+
+
+    center{
+      margin-top: 50px;
+    }
+
+    canvas{
+      margin-top: 60px;
+      box-shadow: 5px 5px 16px 0px rgba(171,171,171,0.82);
+    }
+
+    #text{
+      position: static;
+      font-size: 14px;
+      letter-spacing: 1px;
+      font-family: Shrikhand, cursive;
+      background: -webkit-linear-gradient(left, #d646b2 0%,#38a8c4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-left: 300px;
+      margin-top: -20px;
+      transform: rotate(-20deg);
+      transition: all 0.5s ease-in-out;
+    }
+
+    #text:hover{
+      color: black;
+      transform: rotate(-25deg);
+    }
+
+    #sizeMenu{
+      margin-top: 50px;
+      height: 60px;
+      width: 200px;
+      vertical-align: center;
+      line-height: 60px;
+      font-size: 30px;
+      font-family: Shrikhand, cursive;
+      opacity: 0.1;
+      transition: all 0.5s ease-in-out;
+    }
+
+    #sizeMenu .plusminus{
+      opacity: 0.05;
+      transition: all 0.5s ease-in-out;
+    }
+
+    #sizeMenu:hover{
+      opacity: 0.8;
+    }
+
+    #sizeMenu:hover a{
+      opacity: 0.8;
+    }
+
+
+  </style>
+</head>
+
+<body>
+  <center><a id="title" onClick="ordered()">instant ART</a>
+    <a onClick="gradientShapes()"><p id="text">Now with gradience too!</p></a>
+
+  <div id="container"><canvas id="canvas" height="600px" width="600px"></canvas></div>
+  <div id="sizeMenu">
+    <a onClick="changePixelSize('-')" class="plusminus">-</a>
+    <span id="sizeNumber">100</span>
+    <a onClick="changePixelSize('+')" class="plusminus">+</a>
+  </div>
+
+</center>
+
+  <script>
+
+  document.addEventListener('mousedown', function (event) {
+    if (event.detail > 1) {
+      event.preventDefault();
+      }
+    }, false);
+
+  var c=document.getElementById("canvas");
+  var ctx=c.getContext("2d");
+  ctx.clearRect(0, 0, c.width, c.height);
+  var x = 0;
+  var y = 0;
+
+  var sizes = [1,4,9,25,100,400]; 
+  var pixelArrayCounter = 4;
+  var size = c.height/(Math.sqrt(sizes[pixelArrayCounter]));
+
+  function getRandomGradient(gradientSize){
+    var grd;
+    var random = Math.floor(Math.random() * 4);
+    switch(random){
+      case 0:
+          grd=ctx.createLinearGradient(x,y,x+gradientSize,y+gradientSize);
+        break;
+      case 1:
+          grd=ctx.createLinearGradient(x+gradientSize/2,y,x+gradientSize/2,y+gradientSize);
+        break;
+      case 2:
+          grd=ctx.createLinearGradient(x+gradientSize,y,x,y+gradientSize);
+        break;
+      case 3:
+          grd=ctx.createLinearGradient(x,y+gradientSize/2,x+gradientSize,y+gradientSize/2);
+        break;
+    }
+      grd.addColorStop(0,'#'+ Math.random().toString(16).slice(-6));
+      grd.addColorStop(1,'#'+ Math.random().toString(16).slice(-6));
+
+    return grd;
+  }
+
+
+  function gradientShapes(){
+    var gradient = getRandomGradient(c.width);
+
+    ctx.clearRect(0, 0, c.width, c.height);
+
+    while(x < 600){
+      while(y < 600){
+        ctx.fillStyle = gradient;
+
+        var random = Math.floor(Math.random() * 3);
+        switch(random){
+          case 0:
+              drawSquare(x,y,size);
+            break;
+          case 1:
+              drawTriangle(x,y,size);
+            break;
+          case 2:
+              drawCircle(x,y,size);
+            break;
+        }
+        y += size;
+      }
+      x += size;
+      y = 0;
+    }
+    x = 0;
+    y = 0;
+  }
+  
+
+
+  function ordered(){
+    ctx.clearRect(0, 0, c.width, c.height);
+    if(Math.floor(Math.random() * 11) == 10){ //gradient background sometimes
+      ctx.fillStyle = getRandomGradient(c.width);
+      ctx.fillRect(0, 0, c.width, c.height);
+    }
+    while(x < 600){
+      while(y < 600){
+        var random = Math.floor(Math.random() * 3);
+        ctx.fillStyle = '#'+ Math.random().toString(16).slice(-6);
+        switch(random){
+          case 0:
+              drawSquare(x,y,size);
+            break;
+          case 1:
+              drawTriangle(x,y,size);
+            break;
+          case 2:
+              drawCircle(x,y,size);
+            break;
+        }
+        y += size;
+      }
+      x += size;
+      y = 0;
+    }
+    x = 0;
+    y = 0;
+  }
+  
+  function drawTriangle(x,y, size){
+    ctx.moveTo(x, y);
+    var random = Math.floor(Math.random() * 4);
+        switch(random){
+          case 0:
+            ctx.beginPath();
+            ctx.lineTo(x+size, y);
+            ctx.lineTo(x+size/2, y+((size * Math.sqrt(3))/2));
+            ctx.lineTo(x, y);
+            ctx.fill();
+            break;
+          case 1:
+            ctx.beginPath();
+            ctx.moveTo(x, y+size);
+            ctx.lineTo(x+size/2, y+(size-((size * Math.sqrt(3))/2)));
+            ctx.lineTo(x+size, y + size);
+            ctx.lineTo(x, y+size);
+            ctx.fill();
+            break;
+          case 2:
+            ctx.beginPath();
+            ctx.lineTo(x+((size * Math.sqrt(3))/2), y+size/2);
+            ctx.lineTo(x, y+size);
+            ctx.lineTo(x, y);
+            ctx.fill();
+            break;
+          case 3:
+            ctx.beginPath();
+            ctx.moveTo(x+size, y);
+            ctx.lineTo(x+(size-((size * Math.sqrt(3))/2)), y+size/2);
+            ctx.lineTo(x+size, y+size);
+            ctx.lineTo(x+size, y);
+            ctx.fill();
+            break;
+        }
+  }
+
+  function drawCircle(x,y, size){
+    ctx.beginPath();
+    ctx.arc(x+size/2, y+size/2, size/2, 0, Math.PI * 2, true);
+    ctx.fill();
+  }
+
+  function drawSquare(x,y,size){
+    ctx.fillRect(x, y, size, size);
+  }
+
+  function changePixelSize(param){ 
+    if(param == "+" && pixelArrayCounter != sizes.length-1){
+      pixelArrayCounter += 1;
+      }
+      else if(param == "-" && pixelArrayCounter != 0){
+        pixelArrayCounter -= 1;
+      }
+      size = c.height/(Math.sqrt(sizes[pixelArrayCounter]));
+      document.getElementById("sizeNumber").innerHTML = "<a onClick='toggleSpin()'>" + sizes[pixelArrayCounter] + "</a>";
+  }
+
+  function setBackground(){
+    var img = c.toDataURL();
+    document.body.style.background = "url(" +img+ ")";
+  }
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,254 @@
+<!doctype HTML>
+<html>
+
+<head>
+  <title>instant Art</title>
+  <link href="https://fonts.googleapis.com/css?family=Shrikhand" rel="stylesheet">
+
+  <style>
+    #title {
+      font-family: Shrikhand, cursive;
+      font-size: 50px;
+      color: black;
+      letter-spacing: 3px;
+      margin-top: 1000px;
+      transition: all 0.5s ease-in-out;
+    }
+
+    span{
+      transition: all 0.5s ease-in-out;
+    }
+
+    a:hover{
+      cursor: pointer;
+    }
+
+    #title:hover{
+      color: #ff0000;
+    }
+
+    #title:hover span{
+      color: #ffc107;
+    }
+
+    center{
+      margin-top: 50px;
+    }
+
+    canvas{
+      margin-top: 60px;
+      box-shadow: 5px 5px 16px 0px rgba(171,171,171,0.82);
+    }
+
+    #sizeMenu{
+      margin-top: 50px;
+      height: 60px;
+      width: 200px;
+      vertical-align: center;
+      line-height: 60px;
+      font-size: 30px;
+      font-family: Shrikhand, cursive;
+      opacity: 0.1;
+      transition: all 0.5s ease-in-out;
+    }
+
+    #sizeMenu .plusminus{
+      opacity: 0.05;
+      transition: all 0.5s ease-in-out;
+    }
+
+    #sizeMenu:hover{
+      opacity: 0.8;
+    }
+
+    #sizeMenu:hover a{
+      opacity: 0.8;
+    }
+
+    #text{
+      position: static;
+      font-size: 14px;
+      font-family: Shrikhand, cursive;
+      color: red;
+      margin-left: 300px;
+      margin-top: -20px;
+      transform: rotate(-20deg);
+      transition: all 0.5s ease-in-out;
+    }
+
+    #text:hover{
+      transform: rotate(-25deg);
+    }
+
+    @-webkit-keyframes rotate {
+      from {
+        -webkit-transform: rotate(0deg);
+      }
+      to { 
+        -webkit-transform: rotate(360deg);
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+  <center><a id="title" onClick="colorPixels()">instant <span>ART</span></a>
+    <a onClick="draw('wheel')"><p id="text">Now with just 12 colors!</p></a>
+
+  <div id="container"><canvas id="canvas" height="600px" width="600px"></canvas></div>
+
+  <div id="sizeMenu">
+    <a onClick="changePixelSize('-')" class="plusminus">-</a>
+    <span id="sizeNumber">100</span>
+    <a onClick="changePixelSize('+')" class="plusminus">+</a>
+  </div>
+</center>
+
+
+  <script>
+
+  document.addEventListener('mousedown', function (event) {
+    if (event.detail > 1) {
+      event.preventDefault();
+      }
+    }, false);
+  
+  var c=document.getElementById("canvas");
+  var ctx=c.getContext("2d");
+  ctx.clearRect(0, 0, c.width, c.height);
+  var sizes = [1,4,9,25,100,400,900,3600,10000,40000,90000,360000]; 
+  var pixelArrayCounter = 4;
+  var pixelSize = c.height/(Math.sqrt(sizes[pixelArrayCounter]));
+  var colors = ["#008e5b","#8cbb26","#f4e500","#fdc60b","#f18e1c","#ea621f","#e32322","#c4037d","#6d398b","#444e99","#2a71b0","#0696bb"];
+
+  function colorPixels(){
+    var x = 0;
+    var y = 0;
+    ctx.clearRect(0, 0, c.width, c.height);
+    for(var i = 0; i < sizes[pixelArrayCounter]; i++){
+      ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+      ctx.fillRect(x,y,pixelSize,pixelSize);
+      if(x == c.width-pixelSize){
+        x = 0;
+        y += pixelSize;
+      }
+      else{
+        x += pixelSize;
+      }
+    }
+  }
+
+  function changePixelSize(param){ 
+    if(param == "+" && pixelArrayCounter != sizes.length-1){
+    pixelArrayCounter += 1;
+    }
+    else if(param == "-" && pixelArrayCounter != 0){
+      pixelArrayCounter -= 1;
+    }
+    pixelSize = c.height/(Math.sqrt(sizes[pixelArrayCounter]));
+    document.getElementById("sizeNumber").innerHTML = "<a onClick='toggleSpin()'>" + sizes[pixelArrayCounter] + "</a>";
+  }
+
+
+  function draw(code){
+    var x = 0;
+    var y = 0;
+    switch(code){
+      case "wheel":
+        var random = Math.floor(Math.random() * 4);
+        switch(random){
+          case 0:
+            code = "111111111111111111111111111111111111111111111111111111111111111111161111111111111517111111111114111811111111131111191111111112111A11111111111D1B1111111111111C1111111111111111111111111111111111111111111111111111111111111111111";
+            break;
+          case 1:
+            code = "2233445566772233445566772233445566772233445566772233445566772233445566778899AABBCCDD8899AABBCCDD8899AABBCCDD8899AABBCCDD8899AABBCCDD8899AABBCCDD";
+            break;
+          case 2:
+            code = "23456789ABCD3456789ABCD2456789ABCD2356789ABCD2346789ABCD2345789ABCD2345689ABCD2345679ABCD2345678ABCD23456789BCD23456789ACD23456789ABD23456789ABC";
+            break;
+          case 3:
+            code = "28394A5B6C7D8394A5B6C7D2394A5B6C7D2894A5B6C7D2834A5B6C7D2839A5B6C7D283945B6C7D28394AB6C7D28394A56C7D28394A5BC7D28394A5B67D28394A5B6CD28394A5B6C7";
+            break;
+        }
+        break;
+        
+      default:
+        break;
+    }
+
+    ctx.clearRect(0, 0, c.width, c.height);
+    var pixelSize = c.height/(Math.sqrt(code.length));
+    for(var i = 0; i < code.length; i++){
+      switch(code[i]){
+        case '0':
+          ctx.fillStyle = "#000000";
+          break;
+
+        case '1':
+          ctx.fillStyle = "#ffffff";
+          break;
+
+        case '2':
+          ctx.fillStyle = colors[0];
+          break;
+
+        case '3':
+          ctx.fillStyle = colors[1];
+          break;
+
+        case '4':
+          ctx.fillStyle = colors[2];
+          break;
+
+        case '5':
+          ctx.fillStyle = colors[3];
+          break;
+
+        case '6':
+          ctx.fillStyle = colors[4];
+          break;
+
+        case '7':
+          ctx.fillStyle = colors[5];
+          break;
+
+        case '8':
+          ctx.fillStyle = colors[6];
+          break;
+
+        case '9':
+          ctx.fillStyle = colors[7];
+          break;
+
+        case 'A':
+          ctx.fillStyle = colors[8];
+          break;
+
+        case 'B':
+          ctx.fillStyle = colors[9];
+          break;
+
+        case 'C':
+          ctx.fillStyle = colors[10];
+          break;
+
+        case 'D':
+          ctx.fillStyle = colors[11];
+          break;
+      }
+      ctx.fillRect(x,y,pixelSize,pixelSize);
+      if(x == c.width-pixelSize){
+        x = 0;
+        y += pixelSize;
+      }
+      else{
+        x += pixelSize;
+      }
+    }
+  }
+  
+  </script>
+</body>
+
+</html>

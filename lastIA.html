@@ -1,0 +1,145 @@
+<!doctype HTML>
+<html>
+
+<head>
+  <title>instant Art</title>
+  <link href="https://fonts.googleapis.com/css?family=Shrikhand" rel="stylesheet">
+
+  <style>
+    html,body{
+      margin:0;
+    }
+
+    body{
+
+    }
+
+    #title {
+      font-family: Shrikhand, cursive;
+      font-size: 50px;
+      color: black;
+      background-color: red;
+      letter-spacing: 3px;
+    }
+    
+    span{
+      transition: all 0.5s ease-in-out;
+    }
+
+    a:hover{
+      cursor: pointer;
+    }
+
+    center{
+      margin-top: 50px;
+    }
+
+    canvas{
+      position: fixed;
+      top: 0%;
+      left: 0%;
+      z-index: -1;
+      letter-spacing: 3px;
+    }
+
+    #pic{
+      position: fixed;
+    }
+
+  </style>
+</head>
+
+<body>
+  <a id="link" onClick="start()"><canvas id="canvas" height="600px" width="1200px"></a>
+
+</center>
+  <script>
+
+  document.addEventListener('mousedown', function (event) {
+    if (event.detail > 1) {
+      event.preventDefault();
+      }
+    }, false);
+
+  var c=document.getElementById("canvas");
+  var ctx=c.getContext("2d");
+  c.width = window.innerWidth;
+  c.height = window.innerHeight;
+  var running = true; //for start stop toggle
+
+  var width = 347;//width of text background -- measured
+  var height = 73;//height of text background
+
+  var gap = 0;
+  var rise = true;
+  var maxGap = Math.floor(Math.random()*100)+20;
+
+
+  paintCanvas();
+
+  var intervar;
+
+  function paintCanvas(){
+    var x = 0;
+    var y = 0;
+
+    while(y<c.height){
+      while(x<c.width){
+        writeText(x,y);
+        x += width + gap;
+      }
+      x = 0;
+      y += height + gap;
+    }
+
+    if(gap >= maxGap){
+      rise = false;
+    }
+    else if (gap <= 0){
+      rise = true;
+      maxGap = Math.floor(Math.random()*200);
+    }
+
+    if(rise){
+      gap++;
+    }
+    else{
+      gap--;
+    }
+  }
+
+  function writeText(x,y){
+
+    ctx.fillStyle= '#'+ Math.random().toString(16).slice(-6);
+    ctx.fillRect(x,y,width,height);
+
+    ctx.fillStyle= '#'+ Math.random().toString(16).slice(-6);
+  
+    ctx.font = "50px Shrikhand";
+    ctx.fillText("instant ART",x,y+51);
+
+  }
+
+  
+  function start(){ //sets the interval
+    intervar = setInterval(paintCanvas,20);
+    document.getElementById("link").onclick = stopStartToggle;
+  }
+
+  function stopStartToggle(){
+    if(running){
+      clearInterval(intervar);
+      running = false;
+    }
+    else{
+      intervar = setInterval(paintCanvas,20);
+      running = true;
+    }
+    
+  }
+
+
+  </script>
+</body>
+
+</html>

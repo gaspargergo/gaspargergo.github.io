@@ -1,0 +1,182 @@
+<!doctype HTML>
+<html>
+
+<head>
+  <title>instant Art</title>
+  <link href="https://fonts.googleapis.com/css?family=Shrikhand" rel="stylesheet">
+
+  <style>
+    #title {
+      font-family: Shrikhand, cursive;
+      font-size: 50px;
+      color: black;
+      letter-spacing: 3px;
+      margin-top: 1000px;
+      transition: all 0.5s ease-in-out;
+    }
+
+    span{
+      transition: all 0.5s ease-in-out;
+    }
+
+    a:hover{
+      cursor: pointer;
+    }
+
+    #title:hover{
+      color: #ffc107;
+    }
+
+    #title:hover span{
+      color: #ff0000;
+    }
+
+    center{
+      margin-top: 50px;
+    }
+
+    canvas{
+      margin-top: 60px;
+      box-shadow: 5px 5px 16px 0px rgba(171,171,171,0.82);
+    }
+
+    #sizeMenu{
+      visibility: hidden;
+      margin-top: 50px;
+      height: 60px;
+      width: 200px;
+      vertical-align: center;
+      line-height: 60px;
+      font-size: 30px;
+      font-family: Shrikhand, cursive;
+      opacity: 0.1;
+      transition: all 0.5s ease-in-out;
+    }
+
+    #sizeMenu .plusminus{
+      opacity: 0.05;
+      transition: all 0.5s ease-in-out;
+    }
+
+    #sizeMenu:hover{
+      opacity: 0.8;
+    }
+
+    #sizeMenu:hover a{
+      opacity: 0.8;
+    }
+
+    #text{
+      position: static;
+      font-size: 14px;
+      letter-spacing: 1px;
+      font-family: Shrikhand, cursive;
+      color: red;
+      margin-left: 300px;
+      margin-top: -20px;
+      transform: rotate(-20deg);
+      transition: all 0.5s ease-in-out;
+    }
+
+    #text:hover{
+      transform: rotate(-25deg);
+    }
+
+    @-webkit-keyframes rotate {
+      from {
+        -webkit-transform: rotate(0deg);
+      }
+      to { 
+        -webkit-transform: rotate(360deg);
+      }
+    }
+
+    .spin
+    {
+        -webkit-animation-name:             rotate; 
+        -webkit-animation-duration:         0.5s; 
+        -webkit-animation-iteration-count:  infinite;
+        -webkit-animation-timing-function: linear;
+    }
+
+  </style>
+</head>
+
+<body>
+  <center><a id="title" onClick="spawnCircles()">instant <span>ART</span></a>
+    <a onClick=""><p id="text">Circles!</p></a>
+
+  <div id="container"><a onClick="toggleSpin()"><canvas id="canvas" height="600px" width="600px"></canvas></a></div>
+
+  <div id="sizeMenu">
+    <a onClick="changePixelSize('-')" class="plusminus">-</a>
+    <span id="sizeNumber">2/s</span>
+    <a onClick="changePixelSize('+')" class="plusminus">+</a>
+  </div>
+
+</center>
+
+
+
+  <script>
+
+  document.addEventListener('mousedown', function (event) {
+    if (event.detail > 1) {
+      event.preventDefault();
+      }
+    }, false);
+
+  var c=document.getElementById("canvas");
+  var ctx=c.getContext("2d");
+  ctx.clearRect(0, 0, c.width, c.height);
+
+  var speeds = ["0.5","1","1.5","2","3","5","8","10","100"];
+  var speedCounter = 3;
+  var spinning = false;
+
+  function spawnCircles(){
+    for(var i = 0; i < 200; i++){
+      var x = randomIntFromInterval(0,c.width);
+      var y = randomIntFromInterval(0,c.height);
+      var size = randomIntFromInterval(20,120);
+      ctx.fillStyle = '#'+ Math.random().toString(16).slice(-6);
+      ctx.beginPath();
+      ctx.arc(x,y,size,0,2*Math.PI);
+      ctx.fill();
+    }
+  }
+
+  function randomIntFromInterval(min,max)
+  {
+    return Math.floor(Math.random()*(max-min+1)+min);
+  }
+
+  function changePixelSize(param){ 
+    if(param == "+" && speedCounter != speeds.length-1){
+    speedCounter += 1;
+    }
+    else if(param == "-" && speedCounter != 0){
+      speedCounter -= 1;
+    }
+    c.style.animationDuration = 1/speeds[speedCounter] + "s";
+    document.getElementById("sizeNumber").innerHTML =  speeds[speedCounter] + "/s";
+  }
+
+
+  function toggleSpin(){
+    if(!spinning){
+      c.className += "spin";
+      document.getElementById("sizeMenu").style.visibility = "visible";
+      spinning = true;
+    }
+    else{
+      c.classList.remove("spin");
+      document.getElementById("sizeMenu").style.visibility = "hidden";
+      spinning = false;
+    }
+  
+  }
+  </script>
+</body>
+
+</html>

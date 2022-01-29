@@ -1,0 +1,280 @@
+<!doctype HTML>
+<html>
+<head>
+	
+	<style type="text/css">
+		canvas{
+
+		}
+
+		#myImg{
+			visibility: hidden;
+			position: fixed;
+		}
+
+		#counter{
+			color: red;
+		}
+	</style>
+</head>
+<body>
+	<img id="myImg" src="#" height="402px" alt="your image">
+	<input id="imageUpload" type='file'/>
+	<button onclick="average()" id="submit" disabled>combine</button>
+	<button id="multiply" onclick="multiply()" disabled>multiply</button>
+	<p>number of pictures:
+	<span id="counter">0</span></p>
+	<img src="example.jpg" id="example" alt="one of Türk Péter's images"><br>
+
+	<script type="text/javascript">
+		var counter = 0; //number of canvases added
+
+		var upload=document.getElementById("imageUpload");
+		var imgWidth = 0; //for checking if pictures are identical
+
+		upload.onchange= function(){//uploading the image and putting it on a canvas
+	        var img = document.getElementById("myImg");  // $('img')[0]
+	        img.src = URL.createObjectURL(this.files[0]); // set src to file url
+
+	        //deleting example image
+	        if(document.getElementById("example")){
+	        	var toDelete = document.getElementById("example");
+	        	toDelete.parentNode.removeChild(toDelete);
+	        }
+	        
+	        //creating canvas and calling to load the image onto it
+	    	var elem = document.createElement('canvas');
+		    elem.id = counter.toString();
+		    elem.classList.add("canvases");
+	        document.body.appendChild(elem);
+	        img.onload = imageIsLoaded;
+		}
+
+
+		function imageIsLoaded(e) { //drawing the image onto the canvas
+			var c = document.getElementById(counter.toString());
+			var ctx = c.getContext("2d");
+
+			var img = document.getElementById("myImg");
+
+			if(imgWidth === 0){
+				imgWidth = img.clientWidth;
+			}
+			c.height = img.clientHeight;
+			c.width = img.clientWidth;
+			ctx.drawImage(img,0,0,c.width,c.height);
+
+			counter++;
+			var counterLabel = document.getElementById("counter");
+			counterLabel.innerHTML = counter;
+			if(Math.sqrt(counter) % 1 === 0 && counter > 1){
+				counterLabel.style.color = "green"; //checking if it's a square number (and not one) or not
+				document.getElementById("submit").disabled = false; //enabling submit
+			}
+			else{
+				counterLabel.style.color = "red";
+				document.getElementById("submit").disabled = true;
+			}
+
+			document.getElementById("multiply").disabled = false; //enabling miltiply
+		 }
+
+		function average(){
+			/*if(document.getElementById("myImg").height < document.getElementById("myImg").width){//using the larger number first
+				var littleSquare = littleSquareSide(document.getElementById("myImg").width,document.getElementById("myImg").height);
+			}
+			else{
+				var littleSquare = littleSquareSide(document.getElementById("myImg").height,document.getElementById("myImg").width);
+			}*/
+			var littleSquare = LNKO(document.getElementById("myImg").height,document.getElementById("myImg").width); //THIS IS NOT GOOD, Not for squares
+			console.log(littleSquare);
+			var bigSquare = littleSquare*Math.sqrt(counter);
+
+			var canvases = document.getElementsByTagName("canvas");
+
+			var temp = document.createElement('canvas');
+			temp.id = "temp";
+			temp.height = bigSquare;
+			temp.width = bigSquare;
+			document.body.appendChild(temp);
+
+
+			var elem = document.createElement('canvas');
+			elem.id = "final";
+			elem.width = document.getElementById("myImg").width * Math.sqrt(counter);
+			elem.height = document.getElementById("myImg").height * Math.sqrt(counter);
+		    document.body.appendChild(elem);
+
+
+		    var c = document.getElementById("final");
+		    var ctx = c.getContext("2d");
+
+		    var x = 0;
+		    var y = 0;
+		    var finalX = 0;
+		    var finalY = 0;
+
+		    for(var i = 0; i < c.height/bigSquare;i++){
+		    	for(var j = 0; j < c.width/bigSquare;j++){
+		    		ctx.putImageData(createAverageSquare(x,y,canvases, littleSquare),finalX,finalY);
+		    		x += littleSquare;
+		    		finalX += bigSquare;
+		    	}
+		    	finalX = 0;
+		    	x = 0;
+		    	finalY += bigSquare;
+		    	y += littleSquare;
+		    }
+
+		    //removing the leftover canvases
+		    var canvasesDel = document.getElementsByClassName("canvases");
+				while(canvasesDel.length > 0){
+					canvasesDel[0].parentNode.removeChild(canvasesDel[0]);
+				}
+			var tempDel = document.getElementById("temp");
+			tempDel.parentNode.removeChild(tempDel);
+		}
+
+	 	function createAverageSquare(x,y,canvases, littleSquare){ //gets coordinates to original picture squares and creates a canvas to assemble the imgData on
+	 		var temp = document.getElementById("temp");
+	 		ctx = temp.getContext("2d");
+
+	 		var tempX = 0;
+	 		var tempY = 0;
+
+	 		var canvasCounter = 0;
+
+	 		for(var k = 0; k < Math.sqrt(counter);k++){
+			    for(var j = 0; j < Math.sqrt(counter);j++){
+	    			var imgData = canvases[canvasCounter].getContext("2d").getImageData(x,y,littleSquare,littleSquare);
+	    			ctx.putImageData(imgData, tempX, tempY);
+	    			tempX += littleSquare;
+	    			canvasCounter++;
+		    	}
+		    	tempX = 0;
+			    tempY+= littleSquare;
+			}
+
+			return ctx.getImageData(0,0,temp.width,temp.height);
+	 	}
+
+	 	function littleSquareSide(a,b){ //calculating the side of the little square
+	 		var factors = factor(a,b);
+	 		var filtered = factors.filter(checkNumber)//filtering out numbers smaller than 10 and bigger than 50
+
+	 		//returning the middle number of remaining factors
+	 		return filtered[Math.floor(filtered.length / 2)];
+	 	}
+
+	 	function checkNumber(value){
+	 		return value >= 10 && value <= 50;
+	 	}
+
+	 	function multiply(){ //adds more pictures(always to the nearest square number), to avoid having to add the same picture over and over again
+	 		var img = document.getElementById("myImg");
+	 		var nextSquare = nextSquareNumber(counter);
+	 		var tempCounter = counter; //needed because the counter is always changing, this gets the current state, before the additions
+
+			for(var i = 0; i < nextSquare-tempCounter;i++){
+				var elem = document.createElement('canvas');
+			    elem.id = counter.toString();
+			    elem.classList.add("canvases");
+		        document.body.appendChild(elem);
+		        imageIsLoaded();
+			}		
+	 	}
+
+	 	function nextSquareNumber(num){
+	 		var squareNumbers=[Math.pow(1,2),Math.pow(2,2),Math.pow(3,2),Math.pow(4,2),Math.pow(5,2),Math.pow(6,2),Math.pow(7,2),Math.pow(8,2)] //list of square numbers to use
+	 		for(var i = 0; i < squareNumbers.length; i++){
+	 			if(num < squareNumbers[i]) return squareNumbers[i];
+	 			else if(num === squareNumbers[i]) return squareNumbers[i+1];
+	 		}
+	 	}
+
+	 	function LNKO(num1,num2) { //gets largest common denominator
+	 		var larger = num1 > num2 ? num1 : num2;
+	 		var smaller = num1 < num2 ? num1 : num2;
+	 		var result;
+
+	 		while(smaller != larger){ 
+	 			if(larger > smaller) larger -= smaller;
+	 			else smaller -= larger;
+	 		}
+
+	 		while (smaller > 100){
+	 			
+	 		}
+
+	 		return smaller;
+
+	 	}
+
+	 	//Complicated stuff, calculating all the common factors of two numbers (stolen from:https://stackoverflow.com/questions/47945714/most-efficient-way-to-find-all-common-factors-of-any-two-numbers)
+
+	 	const gcd = (a, b) => {
+		    const impl = (ai, bi) => ai ? impl(bi % ai, ai) : bi;
+		    // handle also case when a or b is 0 from the beginning
+		    return impl(Math.min(a, b), Math.max(a, b))
+		};
+
+		const factor = (v0) => {
+		    let v = v0;
+		    let factors = [1];
+
+		    const addFactors = (fs) => {
+		        if (fs.length > 0) {
+		            // pre-allocate space
+		            let newFactors = new Array(factors.length * fs.length);
+		            let o = 0;
+		            for (let i = 0; i < factors.length; i++)
+		                newFactors[o++] = factors[i];
+
+		            for (let i = 0; i < factors.length; i++) {
+		                for (let j = 0; j < fs.length; j++) {
+		                    newFactors[o++] = factors[i] * fs[j];
+		                }
+		            }
+		            factors = newFactors;
+		        }
+		    };
+
+		    const addFactorPows = (f) => {
+		        // find all powers of the factor
+		        // Example; v = 12, f = 2
+		        // We want pows to be [2, 4]
+		        // This is important for addFactors to work correctly
+		        let p = 1;
+		        let pows = [];
+
+		        while (v % f === 0) {
+		            v /= f;
+		            p *= f;
+		            pows.push(p);
+		        }
+		        addFactors(pows);
+		        return (pows.length !== 0);
+		    };
+
+			addFactorPows(2);
+
+			let s = Math.floor(Math.sqrt(v));
+			for (let i = 3; i <= s; i += 2) {
+			    if (addFactorPows(i)) {
+			        s = Math.floor(Math.sqrt(v));
+			    }
+			}
+			// probably add the last prime, unless there was a perfect square and v = 1
+			if (v !== 1)
+			    addFactorPows(v);
+
+			return factors.sort((a, b) => (a - b));
+		};
+
+		const commonFactors = (a, b) => {
+		    const g = gcd(a, b);
+		    return factor(g);
+		};
+	</script>
+</body>
+</html>

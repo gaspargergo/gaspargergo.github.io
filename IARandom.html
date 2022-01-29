@@ -1,0 +1,264 @@
+<!doctype HTML>
+<html>
+
+<head>
+  <title>instant Art</title>
+  <link href="https://fonts.googleapis.com/css?family=Shrikhand" rel="stylesheet">
+
+  <style>
+    #title {
+      font-family: Shrikhand, cursive;
+      font-size: 50px;
+      color: black;
+      letter-spacing: 3px;
+      margin-top: 1000px;
+      transition: all 0.5s ease-in-out;
+    }
+
+    span{
+      transition: all 0.5s ease-in-out;
+    }
+
+    a:hover{
+      cursor: pointer;
+    }
+
+    #title:hover{
+      color: #ffc107;
+    }
+
+    #title:hover span{
+      color: #ff0000;
+    }
+
+    center{
+      margin-top: 50px;
+    }
+
+    canvas{
+      margin-top: 60px;
+      box-shadow: 5px 5px 16px 0px rgba(171,171,171,0.82);
+    }
+
+    #sizeMenu{
+      visibility: hidden;
+      margin-top: 50px;
+      height: 60px;
+      width: 200px;
+      vertical-align: center;
+      line-height: 60px;
+      font-size: 30px;
+      font-family: Shrikhand, cursive;
+      opacity: 0.1;
+      transition: all 0.5s ease-in-out;
+    }
+
+    #sizeMenu .plusminus{
+      opacity: 0.05;
+      transition: all 0.5s ease-in-out;
+    }
+
+    #sizeMenu:hover{
+      opacity: 0.8;
+    }
+
+    #sizeMenu:hover a{
+      opacity: 0.8;
+    }
+
+    #text{
+      position: static;
+      font-size: 14px;
+      letter-spacing: 1px;
+      font-family: Shrikhand, cursive;
+      color: red;
+      margin-left: 300px;
+      margin-top: -20px;
+      transform: rotate(-20deg);
+      transition: all 0.5s ease-in-out;
+    }
+
+    #text:hover{
+      transform: rotate(-25deg);
+    }
+
+    @-webkit-keyframes rotate {
+      from {
+        -webkit-transform: rotate(0deg);
+      }
+      to { 
+        -webkit-transform: rotate(360deg);
+      }
+    }
+
+    .spin
+    {
+        -webkit-animation-name:             rotate; 
+        -webkit-animation-duration:         0.5s; 
+        -webkit-animation-iteration-count:  infinite;
+        -webkit-animation-timing-function: linear;
+    }
+
+  </style>
+</head>
+
+<body>
+  <center><a id="title" onClick="colorPixels()">instant <span>ART</span></a>
+    <a onClick="differentShapes()"><p id="text">Not just rectangles!</p></a>
+
+  <div id="container"><a onClick="toggleSpin()"><canvas id="canvas" height="600px" width="600px"></canvas></a></div>
+
+  <div id="sizeMenu">
+    <a onClick="changePixelSize('-')" class="plusminus">-</a>
+    <span id="sizeNumber">2/s</span>
+    <a onClick="changePixelSize('+')" class="plusminus">+</a>
+  </div>
+
+</center>
+
+
+
+  <script>
+
+  document.addEventListener('mousedown', function (event) {
+    if (event.detail > 1) {
+      event.preventDefault();
+      }
+    }, false);
+
+  var c=document.getElementById("canvas");
+  var ctx=c.getContext("2d");
+  ctx.clearRect(0, 0, c.width, c.height);
+  var pixelSize = 0;
+
+  var speeds = ["0.5","1","1.5","2","3","5","8","10","100"];
+  var speedCounter = 3;
+  var spinning = false;
+
+  function colorPixels(){
+    var x = 0;
+    var y = 0;
+    var numberOfSquares = Math.floor(Math.random() * 50) + 1;
+    ctx.clearRect(0, 0, c.width, c.height);
+    if(Math.floor(Math.random() * 10)<2){
+      ctx.fillStyle = '#'+ Math.random().toString(16).slice(-6);
+      ctx.fillRect(0,0,c.height,c.width);
+    }
+    for(var i = 0; i < numberOfSquares; i++){
+      x = Math.floor(Math.random() * c.width) - 20;
+      y = Math.floor(Math.random() * c.height) - 20;
+      pixelSize = Math.floor(Math.random() * 100) + 20;
+      ctx.fillStyle = '#'+ Math.random().toString(16).slice(-6);
+      ctx.fillRect(x,y,pixelSize+Math.floor(Math.random() * 40),pixelSize+Math.floor(Math.random() * 40));
+    }
+  }
+
+  function differentShapes(){
+    var x = 0;
+    var y = 0;
+    var numberOfShapes = Math.floor(Math.random() * 99) + 1;
+    ctx.clearRect(0, 0, c.width, c.height);
+    if(Math.floor(Math.random() * 10)<2){
+      ctx.fillStyle = '#'+ Math.random().toString(16).slice(-6);
+      ctx.fillRect(0,0,c.height,c.width);
+    }
+    for(var i = 0; i < numberOfShapes; i++){
+      x = Math.floor(Math.random() * c.width) - 20;
+      y = Math.floor(Math.random() * c.height) - 20;
+      pixelSize = Math.floor(Math.random() * 100) + 20;
+      ctx.fillStyle = '#'+ Math.random().toString(16).slice(-6);
+      var random = Math.floor(Math.random() * 3);
+      switch(random){
+        case 0:
+            drawSquare(x,y,pixelSize);
+          break;
+        case 1:
+            drawTriangle(x,y,pixelSize);
+          break;
+        case 2:
+            drawCircle(x,y,pixelSize);
+          break;
+      }
+    }
+  }
+
+  function drawTriangle(x,y, size){
+    ctx.moveTo(x, y);
+    var random = Math.floor(Math.random() * 4);
+        switch(random){
+          case 0:
+            ctx.beginPath();
+            ctx.lineTo(x+size, y);
+            ctx.lineTo(x+size/2, y+((size * Math.sqrt(3))/2));
+            ctx.lineTo(x, y);
+            ctx.fill();
+            break;
+          case 1:
+            ctx.beginPath();
+            ctx.moveTo(x, y+size);
+            ctx.lineTo(x+size/2, y+(size-((size * Math.sqrt(3))/2)));
+            ctx.lineTo(x+size, y + size);
+            ctx.lineTo(x, y+size);
+            ctx.fill();
+            break;
+          case 2:
+            ctx.beginPath();
+            ctx.lineTo(x+((size * Math.sqrt(3))/2), y+size/2);
+            ctx.lineTo(x, y+size);
+            ctx.lineTo(x, y);
+            ctx.fill();
+            break;
+          case 3:
+            ctx.beginPath();
+            ctx.moveTo(x+size, y);
+            ctx.lineTo(x+(size-((size * Math.sqrt(3))/2)), y+size/2);
+            ctx.lineTo(x+size, y+size);
+            ctx.lineTo(x+size, y);
+            ctx.fill();
+            break;
+        }
+  }
+
+  function drawCircle(x,y, size){
+    ctx.beginPath();
+    ctx.arc(x+size/2, y+size/2, size/2, 0, Math.PI * 2, true);
+    ctx.fill();
+  }
+
+  function drawSquare(x,y,size){
+    ctx.fillRect(x, y, size, size);
+  }
+
+
+  function changePixelSize(param){ 
+    if(param == "+" && speedCounter != speeds.length-1){
+    speedCounter += 1;
+    }
+    else if(param == "-" && speedCounter != 0){
+      speedCounter -= 1;
+    }
+    c.style.animationDuration = 1/speeds[speedCounter] + "s";
+    document.getElementById("sizeNumber").innerHTML =  speeds[speedCounter] + "/s";
+  }
+
+
+  function toggleSpin(){
+    if(!spinning){
+      c.className += "spin";
+      c.style.boxShadow ="none";
+      document.getElementById("sizeMenu").style.visibility = "visible";
+      spinning = true;
+    }
+    else{
+      c.classList.remove("spin");
+      c.style.boxShadow ="5px 5px 16px 0px rgba(171,171,171,0.82)";
+      document.getElementById("sizeMenu").style.visibility = "hidden";
+      spinning = false;
+    }
+  
+  }
+  
+  </script>
+</body>
+
+</html>
