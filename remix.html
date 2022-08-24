@@ -1,0 +1,123 @@
+<!doctype HTML>
+<html>
+<head>
+	
+	<style type="text/css">
+		canvas{
+
+		}
+
+		#myImg{
+			visibility: hidden;
+			position: fixed;
+		}
+
+	</style>
+</head>
+<body>
+	<img id="myImg" src="#" height="402px" alt="your image">
+	<input id="imageUpload" type='file'/>
+	<select id="divideBy">
+	  <option value="2">2</option>
+	  <option value="5" selected>5</option>
+	  <option value="10">10</option>
+	  <option value="20">20</option>
+	  <option value="30">30</option>
+	  <option value="40">40</option>
+	  <option value="50">50</option>
+	  <option value="100">100</option>
+	</select>
+	<button onclick="remix()" id="submit" disabled>Remix!</button>
+
+	<script type="text/javascript">
+		var upload=document.getElementById("imageUpload");
+		var imgWidth = 0; //for checking if pictures are identical
+		var toDivide = 5;
+
+		upload.onchange= function(){//uploading the image and putting it on a canvas
+	        var img = document.getElementById("myImg");  // $('img')[0]
+	        img.src = URL.createObjectURL(this.files[0]); // set src to file url
+
+	        //creating canvas and calling to load the image onto it
+	    	var elem = document.createElement('canvas');
+		    elem.id = "canvas"
+	        document.body.appendChild(elem);
+	        img.onload = imageIsLoaded;
+		}
+
+
+		function imageIsLoaded(e) { //drawing the image onto the canvas
+			var c = document.getElementById("canvas");
+			var ctx = c.getContext("2d");
+
+			var img = document.getElementById("myImg");
+
+			if(imgWidth === 0){
+				imgWidth = img.clientWidth;
+			}
+			c.height = img.clientHeight;
+			c.width = img.clientWidth;
+			ctx.drawImage(img,0,0,c.width,c.height);
+
+
+			document.getElementById("imageUpload").disabled = true; //disabling upload, so only one image can get uploaded
+			document.getElementById("submit").disabled = false; //enabling remix
+		 }
+
+		function remix(){
+			var divideSelect = document.getElementById("divideBy");
+			toDivide = divideSelect.options[divideSelect.selectedIndex].value;
+			var sides = [document.getElementById("myImg").width/toDivide,document.getElementById("myImg").height/toDivide]; 
+			console.log(sides);
+
+			var original = document.getElementById("canvas");
+	   		var ogctx = original.getContext("2d"); 
+
+			var temp = document.createElement('canvas');
+			temp.id = "temp";
+			temp.height = original.height;
+			temp.width = original.width;
+			document.body.appendChild(temp);
+
+		    var c = document.getElementById("temp");
+		    var ctx = c.getContext("2d");
+
+		    var x = 0;
+		    var y = 0;
+
+			var locations = [];
+
+		    for(var i = 0; i < toDivide;i++){ //populating locations
+		    	for(var j = 0; j < toDivide;j++){
+	   				locations.push([x,y]);
+		    		x += sides[0];
+		    	}
+		    	x = 0;
+		    	y += sides[1];
+		    }
+			console.log(locations);
+
+			x = 0;
+			y = 0;
+
+			for(var i = 0; i < toDivide;i++){ //putting image data from original canvas onto the new one by randomly selecting locations and then removing the selected ones
+		    	for(var j = 0; j < toDivide;j++){
+					var random = getRandomInt(locations.length);
+					var data = ogctx.getImageData(locations[random][0],locations[random][1],sides[0],sides[1]);
+					locations.splice(random,1);
+					ctx.putImageData(data,x,y);
+		    		x += sides[0];
+		    	}
+		    	x = 0;
+		    	y += sides[1];
+		    }
+						
+		}
+		
+		function getRandomInt(max) { //gets random int from 0 to max, non-inclusive
+		  return Math.floor(Math.random() * max);
+		}
+
+	</script>
+</body>
+</html>
