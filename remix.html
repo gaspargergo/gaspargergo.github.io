@@ -78,8 +78,8 @@
 	   		var ogctx = original.getContext("2d"); 
 
 			var c = document.getElementById("temp");
-			temp.height = original.height;
-			temp.width = original.width;
+			temp.width = sides[0]*toDivide;
+			temp.height = sides[1]*toDivide;
 		    var ctx = c.getContext("2d");
 			ctx.clearRect(0, 0, c.width, c.height);
 
